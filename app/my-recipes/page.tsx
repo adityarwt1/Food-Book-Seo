@@ -1,20 +1,18 @@
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import dbConnect from "@/lib/db"
-import { Recipe } from "@/models"
+import { Recipe, User } from "@/models"
 import { Edit, Trash2, Plus } from "lucide-react"
-import {  auth, currentUser } from "@clerk/nextjs/server"
+import { auth, currentUser } from "@clerk/nextjs/server"
 import { getOrCreateUser } from "@/lib/utils/auth"
+import Image from "next/image"
 
 
 export default async function MyRecipesPage() {
+
+  const 
   // Check if user is authenticated
   const { username } = await currentUser()
-  const usedataIHave = await currentUser()
-  const UserddataIhave = await auth()
-  console.log("Auth data",UserddataIhave)
-
-  console.log(usedataIHave)
 
   // Redirect to login if not authenticated
   if (!username) {
@@ -25,9 +23,10 @@ export default async function MyRecipesPage() {
   await dbConnect()
 
   // Get user from our database
-  const user = await getOrCreateUser()
+  const recipes = await Recipe.find({ username: username })
 
-  if (!user) {
+
+  if (!username) {
     return (
       <div className="min-h-screen bg-gray-50 py-12 px-4">
         <div className="max-w-6xl mx-auto">
@@ -38,8 +37,29 @@ export default async function MyRecipesPage() {
     )
   }
 
-  // Fetch the user's recipes
-  const recipes = await Recipe.find({ author: username }).populate("category", "name").sort({ createdAt: -1 })
+ 
+
+  const skeletonCard = (
+    <div className="bg-white rounded-xl overflow-hidden shadow-sm animate-pulse">
+      <div className="h-48 bg-gray-200"></div>
+      <div className="p-6">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-24 h-5 bg-gray-200 rounded-full"></div>
+          <div className="w-12 h-4 bg-gray-200 rounded-full"></div>
+        </div>
+        <div className="w-3/4 h-6 bg-gray-300 rounded mb-2"></div>
+        <div className="w-full h-4 bg-gray-200 rounded mb-2"></div>
+        <div className="w-5/6 h-4 bg-gray-200 rounded mb-4"></div>
+        <div className="flex justify-between">
+          <div className="w-20 h-4 bg-gray-200 rounded"></div>
+          <div className="flex gap-2">
+            <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+            <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -55,7 +75,13 @@ export default async function MyRecipesPage() {
           </Link>
         </div>
 
-        {recipes.length === 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i}>{skeletonCard}</div>
+            ))}
+          </div>
+        ) : recipes.length === 0 ? (
           <div className="bg-white rounded-xl p-8 text-center">
             <h2 className="text-xl font-semibold text-gray-700 mb-4">You haven't added any recipes yet</h2>
             <p className="text-gray-500 mb-6">Start building your collection by adding your favorite recipes.</p>
@@ -72,14 +98,18 @@ export default async function MyRecipesPage() {
             {recipes.map((recipe) => (
               <div key={recipe._id} className="bg-white rounded-xl overflow-hidden shadow-sm">
                 <div className="h-48 bg-gray-200 relative">
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">Recipe Image</div>
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                    <Image src={recipe.image} width={200} height={200} alt="Image of recipe" />
+                  </div>
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="px-3 py-1 bg-amber-100 text-amber-600 text-xs font-medium rounded-full">
                       {recipe.category?.name || "Uncategorized"}
                     </span>
-                    <span className="text-gray-500 text-sm">{recipe.prepTime + recipe.cookTime} mins</span>
+                    <span className="text-gray-500 text-sm">
+                      {recipe.prepTime + recipe.cookTime} mins
+                    </span>
                   </div>
                   <h3 className="font-bold text-xl mb-2 text-gray-900">{recipe.title}</h3>
                   <p className="text-gray-600 text-sm line-clamp-2 mb-4">{recipe.description}</p>
@@ -113,5 +143,5 @@ export default async function MyRecipesPage() {
         )}
       </div>
     </div>
-  )
+  );
 }
