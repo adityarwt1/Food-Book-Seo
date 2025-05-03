@@ -1,25 +1,39 @@
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import dbConnect from "@/lib/db"
 import { Recipe } from "@/models"
 import { Edit, Trash2, Plus } from "lucide-react"
+import { auth } from "@clerk/nextjs/server"
+import { getOrCreateUser } from "@/lib/utils/auth"
 
 export default async function MyRecipesPage() {
-  // Get the current user session
-  const session = await getServerSession(authOptions)
+  // Check if user is authenticated
+  const { userId } = await auth()
 
   // Redirect to login if not authenticated
-  if (!session || !session.user) {
-    redirect("/login?callbackUrl=/my-recipes")
+  if (!userId) {
+    redirect("/sign-in?redirect_url=/my-recipes")
   }
 
   // Connect to the database
   await dbConnect()
 
+  // Get user from our database
+  const user = await getOrCreateUser()
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">Error loading user data</h1>
+          <p>There was a problem loading your profile. Please try again later.</p>
+        </div>
+      </div>
+    )
+  }
+
   // Fetch the user's recipes
-  const recipes = await Recipe.find({ author: session.user.id }).populate("category", "name").sort({ createdAt: -1 })
+  const recipes = await Recipe.find({ author: user._id }).populate("category", "name").sort({ createdAt: -1 })
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">

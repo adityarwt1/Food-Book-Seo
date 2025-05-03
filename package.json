@@ -61,8 +61,9 @@
     "@auth/core": "latest",
     "nodemailer": "latest",
     "mongoose": "latest",
-    "bcryptjs": "latest",
-    "next-auth": "latest"
+    "next-auth": "latest",
+    "@clerk/nextjs": "latest",
+    "svix": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

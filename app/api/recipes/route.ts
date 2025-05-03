@@ -1,8 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server"
 import dbConnect from "@/lib/db"
 import { Recipe } from "@/models"
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/lib/auth"
+import { auth } from "@clerk/nextjs/server"
+import { getOrCreateUser } from "@/lib/utils/auth"
 
 // GET all recipes or filter by query params
 export async function GET(request: NextRequest) {
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
 
     // Get recipes with populated author and category
     const recipes = await Recipe.find(filter)
-      .populate("author", "name email")
+      .populate("author", "firstName lastName")
       .populate("category", "name slug")
       .sort({ createdAt: -1 })
 
@@ -40,17 +40,22 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect()
 
-    // Get the current user session
-    const session = await getServerSession(authOptions)
-
-    if (!session || !session.user) {
+    // Check if user is authenticated
+    const { userId } = auth()
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    // Get or create user in our database
+    const user = await getOrCreateUser()
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     const data = await request.json()
 
     // Add the current user as the author
-    data.author = session.user.id
+    data.author = user._id
 
     // Create the recipe
     const recipe = await Recipe.create(data)

@@ -2,13 +2,12 @@
 
 import Link from "next/link"
 import { useState } from "react"
-import { Menu, X, Search, BookOpen, User, LogOut } from "lucide-react"
-import { useSession, signOut } from "next-auth/react"
+import { Menu, X, Search, BookOpen } from "lucide-react"
+import { useUser, UserButton, SignInButton } from "@clerk/nextjs"
 
 export default function Navbar() {
-  const { data: session, status } = useSession()
+  const { isSignedIn, user, isLoaded } = useUser()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
 
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-10">
@@ -28,7 +27,7 @@ export default function Navbar() {
             <Link href="/recipes" className="text-gray-700 hover:text-amber-500 transition-colors">
               Recipes
             </Link>
-            {session && (
+            {isSignedIn && (
               <Link href="/my-recipes" className="text-gray-700 hover:text-amber-500 transition-colors">
                 My Recipes
               </Link>
@@ -44,58 +43,19 @@ export default function Navbar() {
               <Search className="h-5 w-5" />
             </button>
 
-            {status === "loading" ? (
+            {!isLoaded ? (
               <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse"></div>
-            ) : session ? (
-              <div className="relative">
-                <button
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center gap-2 text-gray-700 hover:text-amber-500"
-                >
-                  <div className="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-500">
-                    <User size={18} />
-                  </div>
-                  <span className="hidden md:inline font-medium">{session.user.name}</span>
-                </button>
-
-                {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                    <Link
-                      href="/my-recipes"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      My Recipes
-                    </Link>
-                    <Link
-                      href="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      Profile Settings
-                    </Link>
-                    <button
-                      onClick={() => {
-                        signOut({ callbackUrl: "/" })
-                        setIsUserMenuOpen(false)
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      <div className="flex items-center gap-2">
-                        <LogOut size={16} />
-                        <span>Logout</span>
-                      </div>
-                    </button>
-                  </div>
-                )}
+            ) : isSignedIn ? (
+              <div className="flex items-center gap-2">
+                <span className="hidden md:inline font-medium text-gray-700">{user.firstName || user.username}</span>
+                <UserButton afterSignOutUrl="/" />
               </div>
             ) : (
-              <Link
-                href="/login"
-                className="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors"
-              >
-                Login
-              </Link>
+              <SignInButton mode="modal">
+                <button className="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors">
+                  Login
+                </button>
+              </SignInButton>
             )}
 
             <button
@@ -126,7 +86,7 @@ export default function Navbar() {
             >
               Recipes
             </Link>
-            {session && (
+            {isSignedIn && (
               <Link
                 href="/my-recipes"
                 className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-amber-500 hover:bg-gray-50"
@@ -142,14 +102,12 @@ export default function Navbar() {
             >
               About
             </Link>
-            {!session && (
-              <Link
-                href="/login"
-                className="block px-3 py-2 rounded-md text-base font-medium text-amber-500 hover:bg-amber-50"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Login
-              </Link>
+            {!isSignedIn && (
+              <div className="block px-3 py-2 rounded-md text-base font-medium text-amber-500 hover:bg-amber-50">
+                <SignInButton mode="modal">
+                  <button onClick={() => setIsMenuOpen(false)}>Login</button>
+                </SignInButton>
+              </div>
             )}
           </div>
         </div>

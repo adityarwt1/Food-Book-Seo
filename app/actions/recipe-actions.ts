@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache"
 import dbConnect from "@/lib/db"
 import { Recipe, Category } from "@/models"
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/lib/auth"
+import { auth } from "@clerk/nextjs/server"
+import { getOrCreateUser } from "@/lib/utils/auth"
 
 // Type for recipe form data
 type RecipeFormData = {
@@ -26,17 +26,22 @@ export async function addRecipe(formData: RecipeFormData) {
   try {
     await dbConnect()
 
-    // Get the current user session
-    const session = await getServerSession(authOptions)
-
-    if (!session || !session.user) {
+    // Check if user is authenticated
+    const { userId } = auth()
+    if (!userId) {
       return { success: false, error: "You must be logged in to add a recipe" }
+    }
+
+    // Get or create user in our database
+    const user = await getOrCreateUser()
+    if (!user) {
+      return { success: false, error: "User not found" }
     }
 
     // Create the recipe
     const recipe = await Recipe.create({
       ...formData,
-      author: session.user.id,
+      author: user._id,
     })
 
     // Revalidate the recipes page
@@ -61,11 +66,16 @@ export async function updateRecipe(recipeId: string, formData: RecipeFormData) {
   try {
     await dbConnect()
 
-    // Get the current user session
-    const session = await getServerSession(authOptions)
-
-    if (!session || !session.user) {
+    // Check if user is authenticated
+    const { userId } = auth()
+    if (!userId) {
       return { success: false, error: "You must be logged in to update a recipe" }
+    }
+
+    // Get user from our database
+    const user = await getOrCreateUser()
+    if (!user) {
+      return { success: false, error: "User not found" }
     }
 
     // Find the recipe
@@ -76,7 +86,7 @@ export async function updateRecipe(recipeId: string, formData: RecipeFormData) {
     }
 
     // Check if the user is the author of the recipe
-    if (recipe.author.toString() !== session.user.id) {
+    if (recipe.author.toString() !== user._id.toString()) {
       return { success: false, error: "You are not authorized to update this recipe" }
     }
 
@@ -102,11 +112,16 @@ export async function deleteRecipe(recipeId: string) {
   try {
     await dbConnect()
 
-    // Get the current user session
-    const session = await getServerSession(authOptions)
-
-    if (!session || !session.user) {
+    // Check if user is authenticated
+    const { userId } = auth()
+    if (!userId) {
       return { success: false, error: "You must be logged in to delete a recipe" }
+    }
+
+    // Get user from our database
+    const user = await getOrCreateUser()
+    if (!user) {
+      return { success: false, error: "User not found" }
     }
 
     // Find the recipe
@@ -117,7 +132,7 @@ export async function deleteRecipe(recipeId: string) {
     }
 
     // Check if the user is the author of the recipe or an admin
-    if (recipe.author.toString() !== session.user.id && session.user.role !== "admin") {
+    if (recipe.author.toString() !== user._id.toString() && user.role !== "admin") {
       return { success: false, error: "You are not authorized to delete this recipe" }
     }
 

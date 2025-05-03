@@ -1,8 +1,9 @@
 import Link from "next/link"
 import { Clock, Users, ChevronLeft, Bookmark, Share2, ThumbsUp } from "lucide-react"
 
-export default function RecipeDetailPage({ params }: { params: { id: string } }) {
+export default async function RecipeDetailPage({ slug }: { slug: { id: lstring } }) {
   // In a real app, you would fetch the recipe based on the ID
+  const params = await slug;
   const recipe = recipes.find((r) => r.id === Number.parseInt(params.id)) || recipes[0]
 
   return (
@@ -33,7 +34,7 @@ export default function RecipeDetailPage({ params }: { params: { id: string } })
             </span>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-3">;
             <button className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors">
               <Bookmark size={18} />
               <span>Save Recipe</span>

@@ -1,11 +1,20 @@
 import mongoose from "mongoose"
-import bcrypt from "bcryptjs"
 
 const UserSchema = new mongoose.Schema(
   {
-    name: {
+    clerkId: {
       type: String,
-      required: [true, "Please provide a name"],
+      required: true,
+      unique: true,
+    },
+    firstName: {
+      type: String,
+      required: [true, "Please provide a first name"],
+      maxlength: [50, "Name cannot be more than 50 characters"],
+    },
+    lastName: {
+      type: String,
+      required: [true, "Please provide a last name"],
       maxlength: [50, "Name cannot be more than 50 characters"],
     },
     email: {
@@ -16,12 +25,6 @@ const UserSchema = new mongoose.Schema(
         "Please provide a valid email",
       ],
       unique: true,
-    },
-    password: {
-      type: String,
-      required: [true, "Please provide a password"],
-      minlength: [6, "Password must be at least 6 characters"],
-      select: false, // Don't return password in queries
     },
     profileImage: {
       type: String,
@@ -45,21 +48,6 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true },
 )
-
-// Hash password before saving
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next()
-  }
-  const salt = await bcrypt.genSalt(10)
-  this.password = await bcrypt.hash(this.password, salt)
-  next()
-})
-
-// Method to compare password
-UserSchema.methods.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password)
-}
 
 // Create a virtual field for user's recipes
 UserSchema.virtual("recipes", {

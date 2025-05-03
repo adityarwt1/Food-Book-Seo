@@ -1,15 +1,17 @@
 import { type NextRequest, NextResponse } from "next/server"
 import dbConnect from "@/lib/db"
 import { Recipe } from "@/models"
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/lib/auth"
+import { auth } from "@clerk/nextjs/server"
+import { getOrCreateUser } from "@/lib/utils/auth"
 
 // GET a single recipe by ID
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     await dbConnect()
 
-    const recipe = await Recipe.findById(params.id).populate("author", "name email").populate("category", "name slug")
+    const recipe = await Recipe.findById(params.id)
+      .populate("author", "firstName lastName")
+      .populate("category", "name slug")
 
     if (!recipe) {
       return NextResponse.json({ error: "Recipe not found" }, { status: 404 })
@@ -26,11 +28,16 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   try {
     await dbConnect()
 
-    // Get the current user session
-    const session = await getServerSession(authOptions)
-
-    if (!session || !session.user) {
+    // Check if user is authenticated
+    const { userId } = auth()
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    // Get user from our database
+    const user = await getOrCreateUser()
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     // Find the recipe
@@ -41,7 +48,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 
     // Check if the user is the author of the recipe
-    if (recipe.author.toString() !== session.user.id) {
+    if (recipe.author.toString() !== user._id.toString()) {
       return NextResponse.json({ error: "Not authorized to update this recipe" }, { status: 403 })
     }
 
@@ -61,11 +68,16 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   try {
     await dbConnect()
 
-    // Get the current user session
-    const session = await getServerSession(authOptions)
-
-    if (!session || !session.user) {
+    // Check if user is authenticated
+    const { userId } = auth()
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    // Get user from our database
+    const user = await getOrCreateUser()
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
     // Find the recipe
@@ -75,8 +87,8 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ error: "Recipe not found" }, { status: 404 })
     }
 
-    // Check if the user is the author of the recipe
-    if (recipe.author.toString() !== session.user.id && session.user.role !== "admin") {
+    // Check if the user is the author of the recipe or an admin
+    if (recipe.author.toString() !== user._id.toString() && user.role !== "admin") {
       return NextResponse.json({ error: "Not authorized to delete this recipe" }, { status: 403 })
     }
 
