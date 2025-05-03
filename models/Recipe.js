@@ -2,6 +2,9 @@ import mongoose from "mongoose"
 
 const RecipeSchema = new mongoose.Schema(
   {
+    username:{
+      type: String,
+    },
     title: {
       type: String,
       required: [true, "Please provide a recipe title"],
@@ -55,12 +58,12 @@ const RecipeSchema = new mongoose.Schema(
       default: "/images/default-recipe.jpg",
     },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Category",
       required: [true, "Please provide a category"],
     },
     author: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "User",
       required: [true, "Please provide an author"],
     },

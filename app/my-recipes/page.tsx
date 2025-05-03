@@ -3,15 +3,15 @@ import Link from "next/link"
 import dbConnect from "@/lib/db"
 import { Recipe } from "@/models"
 import { Edit, Trash2, Plus } from "lucide-react"
-import { auth } from "@clerk/nextjs/server"
+import {  currentUser } from "@clerk/nextjs/server"
 import { getOrCreateUser } from "@/lib/utils/auth"
 
 export default async function MyRecipesPage() {
   // Check if user is authenticated
-  const { userId } = await auth()
+  const { username } = await currentUser()
 
   // Redirect to login if not authenticated
-  if (!userId) {
+  if (!username) {
     redirect("/sign-in?redirect_url=/my-recipes")
   }
 

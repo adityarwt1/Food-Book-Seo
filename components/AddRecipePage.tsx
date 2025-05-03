@@ -19,7 +19,7 @@ interface UsernameUserId {
   username: string,
   userId: string
 }
-const  AddRecipePage : React.FC<UsernameUserId> = ({username, userId}) => {
+const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
   const { isSignedIn, isLoaded } = useUser()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -28,7 +28,16 @@ const  AddRecipePage : React.FC<UsernameUserId> = ({username, userId}) => {
   const [image, setImage] = useState<File | null>(null)
   const [imageUrl, setImageUrl] = useState("")
 
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<Category[]>([
+    { _id: "1", name: "Appetizers & Starters", slug: "appetizers-starters" },
+    { _id: "2", name: "Soups & Stews", slug: "soups-stews" },
+    { _id: "3", name: "Salads", slug: "salads" },
+    { _id: "4", name: "Main Dishes", slug: "main-dishes" },
+    { _id: "5", name: "Side Dishes", slug: "side-dishes" },
+    { _id: "6", name: "Desserts", slug: "desserts" },
+    { _id: "7", name: "Snacks", slug: "snacks" },
+    { _id: "8", name: "Beverages", slug: "beverages" },
+  ])
 
   const [formData, setFormData] = useState({
     title: "",
@@ -48,9 +57,18 @@ const  AddRecipePage : React.FC<UsernameUserId> = ({username, userId}) => {
     async function loadCategories() {
       const result = await getCategories()
       if (result.success) {
-        setCategories(result.categories)
+        setCategories([
+          { _id: "1", name: "Appetizers & Starters", slug: "appetizers-starters" },
+          { _id: "2", name: "Soups & Stews", slug: "soups-stews" },
+          { _id: "3", name: "Salads", slug: "salads" },
+          { _id: "4", name: "Main Dishes", slug: "main-dishes" },
+          { _id: "5", name: "Side Dishes", slug: "side-dishes" },
+          { _id: "6", name: "Desserts", slug: "desserts" },
+          { _id: "7", name: "Snacks", slug: "snacks" },
+          { _id: "8", name: "Beverages", slug: "beverages" },
+        ])
       } else {
-        // Fallback categories if API fails
+        // Fall1back categories if API fails
         setCategories([
           { _id: "1", name: "Appetizers & Starters", slug: "appetizers-starters" },
           { _id: "2", name: "Soups & Stews", slug: "soups-stews" },
@@ -142,22 +160,22 @@ const  AddRecipePage : React.FC<UsernameUserId> = ({username, userId}) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
-    
-    const response  = await fetch("/api/recipes",{
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({formData,username, userId, image})
+
+    const response = await fetch("/api/recipes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ formData, username, userId, imageUrl })
     })
     const data = await response.json()
-    if (response.ok){
-        setSuccess(data.success)
-        redirect("/my-recipes")
+    if (response.ok) {
+      setSuccess(data.success)
+      redirect("/my-recipes")
     }
 
-    if (!response.ok){
-        setError(data.error)
+    if (!response.ok) {
+      setError(data.error)
     }
 
 
@@ -195,15 +213,26 @@ const  AddRecipePage : React.FC<UsernameUserId> = ({username, userId}) => {
       setIsLoading(false)
     }
   }
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader(); /// default file reader into browser
+      reader.onload = () => resolve(reader.result as string); /// resolving the file before amaking the url of the image 
+      reader.onerror = reject; //// this is reject when some error of currupt issue into the image file 
+      reader.readAsDataURL(file);  ////  lastt fiel read as a url 
+    });
+  };
+
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       setImage(file)
-      const url = URL.createObjectURL(file)
-      setImageUrl(url)
+      console.log(file)
+      const base64Image = await fileToBase64(file) /// converting here image into the url 
+      setImageUrl(base64Image)
+      console.log(base64Image)
     }
-  } 
+  }
 
   if (!isLoaded) {
     return (
@@ -372,11 +401,11 @@ const  AddRecipePage : React.FC<UsernameUserId> = ({username, userId}) => {
               <div className="flex flex-col items-center">
                 {imageUrl ? (
                   <div className="mb-4">
-                    <Image 
-                      src={imageUrl} 
-                      alt="Preview" 
-                      width={200} 
-                      height={200} 
+                    <Image
+                      src={imageUrl}
+                      alt="Preview"
+                      width={200}
+                      height={200}
                       className="rounded-lg object-cover"
                     />
                   </div>
