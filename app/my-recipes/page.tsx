@@ -3,12 +3,18 @@ import Link from "next/link"
 import dbConnect from "@/lib/db"
 import { Recipe } from "@/models"
 import { Edit, Trash2, Plus } from "lucide-react"
-import {  currentUser } from "@clerk/nextjs/server"
+import {  auth, currentUser } from "@clerk/nextjs/server"
 import { getOrCreateUser } from "@/lib/utils/auth"
+
 
 export default async function MyRecipesPage() {
   // Check if user is authenticated
   const { username } = await currentUser()
+  const usedataIHave = await currentUser()
+  const UserddataIhave = await auth()
+  console.log("Auth data",UserddataIhave)
+
+  console.log(usedataIHave)
 
   // Redirect to login if not authenticated
   if (!username) {
@@ -33,7 +39,7 @@ export default async function MyRecipesPage() {
   }
 
   // Fetch the user's recipes
-  const recipes = await Recipe.find({ author: user._id }).populate("category", "name").sort({ createdAt: -1 })
+  const recipes = await Recipe.find({ author: username }).populate("category", "name").sort({ createdAt: -1 })
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
