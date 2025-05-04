@@ -14,7 +14,7 @@ const RecipeGrid = ({ recipes }: { recipes: any[] })=>{
             <div className="h-48 bg-gray-200 relative">
               <div className="absolute inset-0 flex items-center justify-center text-gray-400 overflow-hidden">
                 <Image
-                  src={recipe.image}
+                  src={recipe.image.length > 0 ? recipe.image : `/rajma-chawal-1.jpg`}
                   width={500}
                   height={500}
                   alt="Recipe image"

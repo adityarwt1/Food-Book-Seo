@@ -9,6 +9,16 @@ const SearchandFilter =  () => {
     const router = useRouter()
     const [query, setQuery] = useState(searchParams.get("q") || "")
     const [category, setCategory] = useState(searchParams.get("categories")|| "")
+    const [categories , setCategories] = useState([
+        { _id: "1", name: "Appetizers & Starters", slug: "appetizers-starters" },
+        { _id: "2", name: "Soups & Stews", slug: "soups-stews" },
+        { _id: "3", name: "Salads", slug: "salads" },
+        { _id: "4", name: "Main Dishes", slug: "main-dishes" },
+        { _id: "5", name: "Side Dishes", slug: "side-dishes" },
+        { _id: "6", name: "Desserts", slug: "desserts" },
+        { _id: "7", name: "Snacks", slug: "snacks" },
+        { _id: "8", name: "Beverages", slug: "beverages" },
+      ])
 
 
     useEffect(() => {
@@ -31,7 +41,7 @@ const SearchandFilter =  () => {
 
         return ()=> clearTimeout(timeout)
 
-    },[query,router])
+    },[query,router, category])
 
 
 
@@ -54,7 +64,10 @@ const SearchandFilter =  () => {
                 <div className="flex gap-2">
                     <select  onChange={(e)=> setCategory(e.target.value)}  className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent">
                         <option value="">All Categories</option>
-                        <option value="breakfast">Breakfast</option>
+                        {categories.map((cat,index)=>(
+
+                        <option key={cat._id} value="breakfast">{cat.name}</option>
+                        ))}
                         <option value="main-course">Main Course</option>
                         <option value="desserts">Desserts</option>
                         <option value="vegetarian">Vegetarian</option>
