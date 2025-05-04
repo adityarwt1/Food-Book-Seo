@@ -34,7 +34,7 @@ const SearchandFilter =  () => {
     },[query,router])
 
 
-    
+
 
 
     return (
