@@ -1,0 +1,73 @@
+"use client"
+import { Filter, Search } from "lucide-react";
+import { useParams, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+
+const SearchandFilter =  () => {
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const [query, setQuery] = useState(searchParams.get("q") || "")
+    const [category, setCategory] = useState(searchParams.get("categories")|| "")
+
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            const params = new URLSearchParams(window.location.search)
+            if (query) {
+                params.set("recipie", query)
+            }
+            
+            if (category){
+                params.set("category", category)
+            }   
+            else{
+                params.delete("recipie")
+                params.delete("category")
+            }
+
+            router.push(`?${params.toString()}`)
+        }, 100);
+
+        return ()=> clearTimeout(timeout)
+
+    },[query,router])
+
+
+    
+
+
+    return (
+        <div className="bg-white p-4 rounded-lg shadow-sm mb-8">
+            <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1 relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Search className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Search recipes..."
+                        className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                </div>
+                <div className="flex gap-2">
+                    <select  onChange={(e)=> setCategory(e.target.value)}  className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                        <option value="">All Categories</option>
+                        <option value="breakfast">Breakfast</option>
+                        <option value="main-course">Main Course</option>
+                        <option value="desserts">Desserts</option>
+                        <option value="vegetarian">Vegetarian</option>
+                    </select>
+                    <button className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-md hover:bg-amber-600 transition-colors">
+                        <Filter size={18} />
+                        <span className="hidden md:inline">Filter</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    )
+}
+
+export default SearchandFilter;
