@@ -1,50 +1,44 @@
 import connectDB from "@/lib/db";
 import { Recipe } from "@/models";
-import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-    
-try {
-    await connectDB()
+export async function GET(req: NextRequest) {
+    try {
+        await connectDB();
 
-    const recipies = await Recipe.find({})
-    if ( !recipies){
-        return NextResponse.json({success: false, error: "No one recipie found"}, {status: 404})
-    }
-    return NextResponse.json({recipies}, {status: 200})
+        const searchParams = req.nextUrl.searchParams;
+        const query = searchParams.get('query') || '';
+        const category = searchParams.get('category') || '';
 
-} catch (error) {
-        console.log("Error while connecting ")
-        return NextResponse.json({success: false , message : "Internal Server Issue"}, {status: 500})
-}
-}
+        let filter: any = {};
 
-export async function POST(req: NextRequest) {
-
-    try{
-        await connectDB()
-        const {category} = await req.json();
-        console.log(category)
-
-        if (!category){
-            return NextResponse.json({success: false , message : "Bad request"}, {status: 400 })
+        if (query) {
+            filter.$or = [
+                { title: { $regex: query, $options: 'i' } },
+                { description: { $regex: query, $options: 'i' } }
+            ];
         }
 
-        const recipies = await Recipe.find({category : category})
-        if (!recipies){
-            return NextResponse.json({success: false , message: "No one recipie found according to the category"}, {status: 404})
+        if (category) {
+            filter.category = category;
         }
 
-        return NextResponse.json({recipies} ,{status: 200} )
+        const recipes = await Recipe.find(filter);
 
-    }
-    catch (error) {
-        console.log(error)
-        return NextResponse.json({success: false , message: "Internal Server issue"}, {status: 500})
+        if (!recipes || recipes.length === 0) {
+            return NextResponse.json(
+                { success: false, error: "No recipes found" },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json({ recipes }, { status: 200 });
+
+    } catch (error) {
+        console.error("Error fetching recipes:", error);
+        return NextResponse.json(
+            { success: false, message: "Internal Server Error" },
+            { status: 500 }
+        );
     }
 }
-
-
-
-
