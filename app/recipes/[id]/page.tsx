@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Clock, Users, ChevronLeft, Bookmark, Share2, ThumbsUp } from "lucide-react"
 import connectDB from "@/lib/db";
 import { Recipe } from "@/models";
+import Image from "next/image";
 
 export default async function RecipeDetailPage({
   params,
@@ -12,8 +13,8 @@ export default async function RecipeDetailPage({
 
   await connectDB()
   const recipe = await Recipe.findOne({ _id: id })
-
-  if (!recipe) {
+  
+  if (recipe.length >0) {
     return (
       <div className="min-h-screen bg-white py-12 px-4 h-screen">
         <div className="max-w-4xl mx-auto animate-pulse">
@@ -83,7 +84,7 @@ export default async function RecipeDetailPage({
       </div>
     )
   }
-
+else{
   return (
     <div className="min-h-screen bg-white py-12 px-4">
       <div className="max-w-4xl mx-auto">
@@ -129,8 +130,8 @@ export default async function RecipeDetailPage({
         </div>
 
         {/* Recipe Image */}
-        <div className="h-80 bg-gray-200 rounded-xl mb-8 flex items-center justify-center text-gray-400">
-          Recipe Image
+        <div className="h-80 bg-gray-200 rounded-xl mb-8 flex items-center justify-center text-gray-400 overflow-hidden ">
+          <Image width={500} height={500} src={recipe.image} alt="recie image"/>
         </div>
 
         {/* Ingredients and Instructions */}
@@ -166,4 +167,5 @@ export default async function RecipeDetailPage({
       </div>
     </div>
   )
+}
 }

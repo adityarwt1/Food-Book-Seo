@@ -476,7 +476,7 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Instructions</h2>
             <div className="space-y-4">
               {formData.instructions.map((instruction, index) => (
-                <div key={index} className="flex gap-2">
+                <div key={index} className="flex gap-2 items-center">
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold">
                     {index + 1}
                   </div>

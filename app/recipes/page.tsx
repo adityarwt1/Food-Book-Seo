@@ -1,7 +1,15 @@
 import Link from "next/link"
 import { Filter, Search } from "lucide-react"
+import connectDB from "@/lib/db"
+import { Recipe } from "@/models"
+import Image from "next/image"
+import { Suspense } from "react"
+import RecipeCardSkeleton from "@/components/RecipeCardSkeleton"
 
-export default function RecipesPage() {
+export default async function RecipesPage() {
+  await connectDB()
+  const recipes = await Recipe.find({})
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-6xl mx-auto">
@@ -36,82 +44,63 @@ export default function RecipesPage() {
           </div>
         </div>
 
-        {/* Recipe Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {recipes.map((recipe) => (
-            <Link
-              key={recipe.id}
-              href={`/recipes/${recipe.id}`}
-              className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="h-48 bg-gray-200 relative">
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400">Recipe Image</div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-3 py-1 bg-amber-100 text-amber-600 text-xs font-medium rounded-full">
-                    {recipe.category}
-                  </span>
-                  <span className="text-gray-500 text-sm">{recipe.time} mins</span>
-                </div>
-                <h3 className="font-bold text-xl mb-2 text-gray-900">{recipe.title}</h3>
-                <p className="text-gray-600 text-sm line-clamp-2">{recipe.description}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {/* Recipe Grid with Suspense */}
+        <Suspense fallback={<RecipeGridSkeleton />}>
+          <RecipeGrid recipes={recipes} />
+        </Suspense>
       </div>
+    </div>
+  );
+}
+
+function RecipeGrid({ recipes }: { recipes: any[] }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {recipes.map((recipe) => (
+        <Link
+          key={recipe.id}
+          href={`/recipes/${recipe.id}`}
+          className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+        >
+          <div className="h-48 bg-gray-200 relative">
+            <div className="absolute inset-0 flex items-center justify-center text-gray-400 overflow-hidden">
+              <Image
+                src={recipe.image}
+                width={500}
+                height={500}
+                alt="Recipe image"
+                className="object-cover w-full h-full"
+              />
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="px-3 py-1 bg-amber-100 text-amber-600 text-xs font-medium rounded-full">
+                {recipe.category}
+              </span>
+              <span className="text-gray-500 text-sm">
+                {recipe.time} mins
+              </span>
+            </div>
+            <h3 className="font-bold text-xl mb-2 text-gray-900">
+              {recipe.title}
+            </h3>
+            <p className="text-gray-600 text-sm line-clamp-2">
+              {recipe.description}
+            </p>
+          </div>
+        </Link>
+      ))}
     </div>
   )
 }
 
-const recipes = [
-  {
-    id: 1,
-    title: "Avocado Toast with Poached Eggs",
-    description:
-      "Start your day with this nutritious and delicious breakfast that combines creamy avocado with perfectly poached eggs on toasted sourdough bread.",
-    category: "Breakfast",
-    time: 15,
-  },
-  {
-    id: 2,
-    title: "Creamy Mushroom Risotto",
-    description:
-      "A comforting Italian classic made with arborio rice, mushrooms, white wine, and parmesan cheese for a rich and creamy texture.",
-    category: "Main Course",
-    time: 40,
-  },
-  {
-    id: 3,
-    title: "Chocolate Lava Cake",
-    description:
-      "Indulge in this decadent dessert featuring a warm chocolate cake with a gooey molten center, perfect for chocolate lovers.",
-    category: "Desserts",
-    time: 25,
-  },
-  {
-    id: 4,
-    title: "Vegetable Stir Fry",
-    description:
-      "A quick and healthy meal packed with colorful vegetables and tossed in a savory sauce. Perfect for busy weeknights.",
-    category: "Vegetarian",
-    time: 20,
-  },
-  {
-    id: 5,
-    title: "Blueberry Pancakes",
-    description:
-      "Fluffy pancakes studded with fresh blueberries and drizzled with maple syrup. A weekend breakfast favorite!",
-    category: "Breakfast",
-    time: 30,
-  },
-  {
-    id: 6,
-    title: "Beef Lasagna",
-    description:
-      "Layers of pasta, rich meat sauce, and creamy béchamel topped with melted cheese. A classic comfort food dish.",
-    category: "Main Course",
-    time: 90,
-  },
-]
+function RecipeGridSkeleton() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <RecipeCardSkeleton key={i} />
+      ))}
+    </div>
+  )
+}
