@@ -30,11 +30,10 @@ const SearchandFilter =  () => {
             
             if (category){
                 params.set("category", category)
-            }   
-            else{
+            }  
+            if(query.length < 0){
                 params.delete("recipie")
-                params.delete("category")
-            }
+            } 
 
             router.push(`?${params.toString()}`)
         }, 100);
@@ -66,7 +65,7 @@ const SearchandFilter =  () => {
                         <option value="">All Categories</option>
                         {categories.map((cat,index)=>(
 
-                        <option key={cat._id} value="breakfast">{cat.name}</option>
+                        <option key={cat._id} value={cat.name}>{cat.name}</option>
                         ))}
                         <option value="main-course">Main Course</option>
                         <option value="desserts">Desserts</option>
