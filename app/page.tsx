@@ -1,7 +1,27 @@
+"use client"
 import Link from "next/link"
 import { ArrowRight, UtensilsCrossed } from "lucide-react"
+import { useEffect, useState } from "react"
+import connectDB from "@/lib/db"
+import Recipe from "@/models/FeatruredRecipie"
 
 export default function Home() {
+  const [featuredRecipes, setFeaturedRecipes] = useState([])
+
+  const recipefetch = async () => {
+    const response = await fetch("/api/fetchrecipie/featured", {
+      method: "GET"
+    })
+    const data = await response.json()
+
+    if (response.ok) 
+      setFeaturedRecipes(data.recipes)
+    
+  }
+  useEffect(() => {
+    recipefetch()
+  },[])
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -68,8 +88,8 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredRecipes.map((recipe) => (
               <Link
-                key={recipe.id}
-                href={`/recipes/${recipe.id}`}
+                key={recipe._id}
+                href={`/recipes/${recipe._id}`}
                 className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="h-48 bg-gray-200 relative">
@@ -80,13 +100,14 @@ export default function Home() {
                     <span className="px-3 py-1 bg-amber-100 text-amber-600 text-xs font-medium rounded-full">
                       {recipe.category}
                     </span>
-                    <span className="text-gray-500 text-sm">{recipe.time} mins</span>
+                    <span className="text-gray-500 text-sm">{recipe.totalTime} mins</span>
                   </div>
                   <h3 className="font-bold text-xl mb-2 text-gray-900">{recipe.title}</h3>
                   <p className="text-gray-600 text-sm line-clamp-2">{recipe.description}</p>
                 </div>
               </Link>
             ))}
+
           </div>
         </div>
       </section>
@@ -101,29 +122,3 @@ const categories = [
   { id: 4, name: "Vegetarian", count: 12, slug: "vegetarian" },
 ]
 
-const featuredRecipes = [
-  {
-    id: 1,
-    title: "Avocado Toast with Poached Eggs",
-    description:
-      "Start your day with this nutritious and delicious breakfast that combines creamy avocado with perfectly poached eggs on toasted sourdough bread.",
-    category: "Breakfast",
-    time: 15,
-  },
-  {
-    id: 2,
-    title: "Creamy Mushroom Risotto",
-    description:
-      "A comforting Italian classic made with arborio rice, mushrooms, white wine, and parmesan cheese for a rich and creamy texture.",
-    category: "Main Course",
-    time: 40,
-  },
-  {
-    id: 3,
-    title: "Chocolate Lava Cake",
-    description:
-      "Indulge in this decadent dessert featuring a warm chocolate cake with a gooey molten center, perfect for chocolate lovers.",
-    category: "Desserts",
-    time: 25,
-  },
-]

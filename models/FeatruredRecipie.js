@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 const RecipeSchema = new mongoose.Schema(
   {
-    username:{
+    username: {
       type: String,
     },
     title: {
@@ -86,15 +86,15 @@ const RecipeSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  },
+  }
 )
 
-// Create a virtual field for total time
+// Virtual for total time
 RecipeSchema.virtual("totalTime").get(function () {
   return this.prepTime + this.cookTime
 })
 
-// Create a virtual field for reviews
+// Virtual for reviews
 RecipeSchema.virtual("reviews", {
   ref: "Review",
   localField: "_id",
@@ -113,12 +113,13 @@ RecipeSchema.pre("save", function (next) {
   next()
 })
 
-// Add indexes for better query performance
+// Indexes for performance
 RecipeSchema.index({ title: "text", description: "text", tags: "text" })
 RecipeSchema.index({ category: 1 })
 RecipeSchema.index({ author: 1 })
 RecipeSchema.index({ featured: 1 })
 RecipeSchema.index({ createdAt: -1 })
 
-// Don't create the model if it already exists
-export default mongoose.models.Featured || mongoose.model("Featured", RecipeSchema)
+// Corfrect model name
+const Featured = mongoose.models.Featured || mongoose.model("Featured", RecipeSchema)
+export default Featured

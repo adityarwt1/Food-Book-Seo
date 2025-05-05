@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
 
     // Check if user is authenticated
     const {formData , userId , username , imageUrl} = await request.json()
-    console.log(formData , userId , username )
     if (!username) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
