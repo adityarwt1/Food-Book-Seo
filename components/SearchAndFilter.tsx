@@ -30,6 +30,9 @@ const SearchandFilter = () => {
       
       if (category) params.set("category", category)
       else params.delete("category")
+    if (category == "all"){
+      params.delete("category")
+    }
       
       router.push(`?${params.toString()}`)
     }, 500)
@@ -58,7 +61,7 @@ const SearchandFilter = () => {
             onChange={(e) => setCategory(e.target.value)}
             className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           >
-            <option value="">All Categories</option>
+            <option value="all">All Categories</option>
             {categories.map((cat) => (
               <option key={cat._id} value={cat.name}>
                 {cat.name}

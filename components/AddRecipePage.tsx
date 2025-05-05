@@ -168,6 +168,7 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
       },
       body: JSON.stringify({ formData, username, userId, imageUrl })
     })
+    console.log({formData, username , userId, imageUrl })
     const data = await response.json()
     if (response.ok) {
       setSuccess(data.success)
