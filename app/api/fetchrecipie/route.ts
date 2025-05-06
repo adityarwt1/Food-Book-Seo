@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
         const searchParams = req.nextUrl.searchParams;
         const query = searchParams.get('query') || '';
         const category = searchParams.get('category') || '';
+        const id = searchParams.get("id") || ""
 
         let filter: any = {};
 
@@ -21,6 +22,9 @@ export async function GET(req: NextRequest) {
 
         if (category) {
             filter.category = category;
+        }
+        if (id){
+            filter._id = id
         }
 
         const recipes = await Recipe.find(filter);
