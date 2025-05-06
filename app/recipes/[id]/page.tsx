@@ -1,3 +1,4 @@
+"use server"
 import Link from "next/link"
 import { Clock, Users, ChevronLeft, Bookmark, Share2, ThumbsUp, Pencil } from "lucide-react"
 import connectDB from "@/lib/db";
@@ -16,6 +17,33 @@ export default async function RecipeDetailPage({
   const recipe = await Recipe.findOne({ _id: id })
 
   const user = await currentUser()
+
+  const handleShare = () => {
+    const handleShare = async () => {
+      const shareData = {
+        title: "Check this out!",
+        text: "I found this awesome page:",
+        url: window.location.href,
+      };
+  
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+          console.log("Page shared successfully!");
+        } catch (error) {
+          console.error("Error sharing:", error);
+        }
+      } else {
+        // Fallback: copy link to clipboard
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          alert("Link copied to clipboard!");
+        } catch (err) {
+          alert("Failed to copy link. Please copy it manually.");
+        }
+      }
+    };
+  }
   if (recipe) {
     return (
       <div className="min-h-screen bg-white py-12 px-4">
@@ -50,7 +78,7 @@ export default async function RecipeDetailPage({
                 <Bookmark size={18} />
                 <span>Save Recipe</span>
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+              <button onClick={handleShare} className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
                 <Share2 size={18} />
                 <span>Share</span>
               </button>
@@ -59,9 +87,9 @@ export default async function RecipeDetailPage({
                 <span>Like</span>
               </button>
 
-              {recipe.author === user.username && (
+              {recipe.author === user?.username && (
                 <Link
-                  href={`/edit-recipe/${recipe._id}?username=${user.username}`}
+                  href={`/edit-recipe/${recipe._id}?username=${user?.username}`}
                   className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                 >
                   <span><Pencil size={18} /></span>
