@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     await connectDB();
-    const { id } = params;
+    const { id } = await params;
     const formData = await req.json();
 
     const updatedRecipe = await Recipe.findOneAndUpdate(
