@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { Clock, Users, ChevronLeft, Bookmark, Share2, ThumbsUp } from "lucide-react"
+import { Clock, Users, ChevronLeft, Bookmark, Share2, ThumbsUp, Pencil } from "lucide-react"
 import connectDB from "@/lib/db";
 import { Recipe } from "@/models";
 import Image from "next/image";
+import { currentUser } from "@clerk/nextjs/server";
 
 export default async function RecipeDetailPage({
   params,
@@ -14,6 +15,7 @@ export default async function RecipeDetailPage({
   await connectDB()
   const recipe = await Recipe.findOne({ _id: id })
 
+  const user = await currentUser()
   if (recipe) {
     return (
       <div className="min-h-screen bg-white py-12 px-4">
@@ -22,7 +24,7 @@ export default async function RecipeDetailPage({
           <Link href="/recipes" className="inline-flex items-center text-amber-500 hover:text-amber-600 mb-6">
             <ChevronLeft size={20} />
             <span>Back to recipes</span>
-          </Link>
+          </Link> 
 
           {/* Recipe Header */}
           <div className="mb-8">
@@ -56,7 +58,18 @@ export default async function RecipeDetailPage({
                 <ThumbsUp size={18} />
                 <span>Like</span>
               </button>
+
+              {recipe.author === user.username && (
+                <Link
+                  href={`/edit-recipe/${recipe._id}?username=${user.username}`}
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                >
+                  <span><Pencil size={18} /></span>
+                  <span>Edit</span>
+                </Link>
+              )}
             </div>
+
           </div>
 
           {/* Recipe Image */}
