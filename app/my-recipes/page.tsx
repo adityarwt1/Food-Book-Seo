@@ -101,7 +101,7 @@ export default async function MyRecipesPage() {
             <div key={recipe._id} className="bg-white rounded-xl overflow-hidden shadow-sm">
               <div className="h-48 bg-gray-200 relative">
                 <div className="absolute inset-0 flex items-center justify-center text-gray-400 overflow-hidden">
-                  <Image src={recipe.image} width={500} height={500} alt="Image of recipe" />
+                  <Image src={recipe.image || "/rajma-chawal-1.jpg"} width={500} height={500} alt="Image of recipe" />
                 </div>
               </div>
               <div className="p-6">

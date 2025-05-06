@@ -8,16 +8,15 @@ import { getOrCreateUser } from "@/lib/utils/auth"
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     await dbConnect()
+    const {id} = await params
 
-    const recipe = await Recipe.findById(params.id)
-      .populate("author", "firstName lastName")
-      .populate("category", "name slug")
+    const recipe = await Recipe.findOne({id})
 
     if (!recipe) {
       return NextResponse.json({ error: "Recipe not found" }, { status: 404 })
     }
 
-    return NextResponse.json(recipe)
+    return NextResponse.json({data: recipe} , {status: 200})
   } catch (error: any) {
     return NextResponse.json({ error: "Failed to fetch recipe", details: error.message }, { status: 500 })
   }

@@ -122,3 +122,4 @@ RecipeSchema.index({ createdAt: -1 })
 
 // Don't create the model if it already exists
 export default mongoose.models.Recipe || mongoose.model("Recipe", RecipeSchema)
+ 
