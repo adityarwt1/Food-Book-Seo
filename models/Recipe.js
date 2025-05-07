@@ -67,6 +67,10 @@ const RecipeSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "Please provide an author"],
     },
+    like:{
+      type: Number,
+      default: 0,
+    },
     featured: {
       type: Boolean,
       default: false,
