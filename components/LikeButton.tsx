@@ -4,11 +4,11 @@ import { ThumbsUp } from 'lucide-react'
 import React, { useState } from 'react'
 
 
-const LikeButton = ({ initialLikes, recipieId }: { initialLikes: number, recipieId: string }) => {
+const LikeButton = async ({ initialLikes, recipieId }: { initialLikes: number, recipieId: string }) => {
 
     const [likes, setLikes] = useState(initialLikes)
     const [liked, setLiked] = useState(false)
-    const {username} = useUser()
+    const {username} =  useUser()
 
 
     const handleLike = async () => {
@@ -43,7 +43,7 @@ const LikeButton = ({ initialLikes, recipieId }: { initialLikes: number, recipie
     }
     return (
         <div>
-            <button onClick={handleLike} className={`flex text-white ${liked ? `bg-amber-500 `:"text-black"} items-center gap-2 px-4 py-2 border border-gray-300 rounded-md transition-colors`}>
+            <button onClick={handleLike} className={`flex text-black ${liked ? `bg-amber-500 text-white `:"text-black"} items-center gap-2 px-4 py-2 border border-gray-300 rounded-md transition-colors`}>
                 <span>{likes}</span>
                 <ThumbsUp size={18} />
                 <span> {initialLikes > 1 ? "Likes" : "Like"}</span>

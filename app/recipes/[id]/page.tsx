@@ -52,7 +52,7 @@ export default async function RecipeDetailPage({
             </div>
 
             <div className="flex gap-3">
-              <button className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors">
+              <button className="flex items-center gap-2 px-4 py-2  bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors">
                 <Bookmark size={18} />
                 <span>Save Recipe</span>
               </button>
