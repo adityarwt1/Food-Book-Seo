@@ -16,7 +16,8 @@ export async function GET(req: NextRequest) {
         if (query) {
             filter.$or = [
                 { title: { $regex: query, $options: 'i' } },
-                { description: { $regex: query, $options: 'i' } }
+                { description: { $regex: query, $options: 'i' } },
+                {slug: {$regex: query, $options: 'i'}}
             ];
         }
 

@@ -66,7 +66,6 @@ export default function Home() {
                   <UtensilsCrossed className="text-amber-500" size={24} />
                 </div>
                 <h3 className="font-medium text-gray-900">{category.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">{category.count} recipes</p>
               </Link>
             ))}
           </div>
@@ -117,7 +116,7 @@ export default function Home() {
 
 const categories = [
   { id: 1, name: "Breakfast", count: 24, slug: "breakfast" },
-  { id: 2, name: "Main Course", count: 36, slug: "main-course" },
+  { id: 2, name: "Main Dishes", count: 36, slug: "main-dishes" },
   { id: 3, name: "Desserts", count: 18, slug: "desserts" },
   { id: 4, name: "Vegetarian", count: 12, slug: "vegetarian" },
 ]

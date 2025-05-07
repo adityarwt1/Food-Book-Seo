@@ -16,7 +16,7 @@ export default async function RecipeDetailPage({
 
   await connectDB()
   const recipe = await Recipe.findOne({ _id: id })
-  console.log("Likes on recipie" , recipe.likes)
+
 
 
   const user = await currentUser()
