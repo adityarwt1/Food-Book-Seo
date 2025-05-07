@@ -15,10 +15,11 @@ const MyRecipie : React.FC<Username> = ({username})=> {
 
   // Connect to the database
   const fetchRecipie = async ()=>{
-    const response = await fetch(`/api/fetchrecipie?username=${username}`,{
+    const response = await fetch(`/api/fetchrecipie?author=${username}`,{
       method: "GET"
     })
     const data = await response.json()
+    console.log(data)
     if(response.ok){
       setRecipes(data.recipes)
     }
@@ -36,7 +37,7 @@ const MyRecipie : React.FC<Username> = ({username})=> {
 
   useEffect(()=>{
     fetchRecipie()
-  },[recipes])
+  },[])
 
   if (!username) {
     return (
@@ -142,7 +143,7 @@ const MyRecipie : React.FC<Username> = ({username})=> {
                       <Edit size={18} />
                     </Link>
                     <button
-                      onClick={handleDelete(recipe._id)}
+                      onClick={()=> handleDelete(recipe._id)}
                       className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                     >
                       <Trash2 size={18} />
