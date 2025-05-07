@@ -5,6 +5,7 @@ import connectDB from "@/lib/db";
 import { Recipe } from "@/models";
 import Image from "next/image";
 import { currentUser } from "@clerk/nextjs/server";
+import LikeButton from "@/components/LikeButton";
 
 export default async function RecipeDetailPage({
   params,
@@ -15,8 +16,11 @@ export default async function RecipeDetailPage({
 
   await connectDB()
   const recipe = await Recipe.findOne({ _id: id })
+  console.log("Likes on recipie" , recipe.likes)
+
 
   const user = await currentUser()
+  
 
   if (recipe) {
     return (
@@ -53,10 +57,8 @@ export default async function RecipeDetailPage({
                 <span>Save Recipe</span>
               </button>
              
-              <button  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
-                <ThumbsUp size={18} />
-                <span>Like</span>
-              </button>
+            
+              <LikeButton initialLikes={recipe.likes} recipieId={id}/>
 
               {recipe.author === user?.username && (
                 <Link
