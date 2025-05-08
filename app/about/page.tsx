@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, Heart, Utensils, Users } from "lucide-react"
+import { ArrowRight, Heart, Utensils, Users, Instagram, Github } from "lucide-react"
 import Image from "next/image"
 
 export default function AboutPage() {
@@ -18,8 +18,12 @@ export default function AboutPage() {
         </div>
       </section>
       <div className="flex flex-col justify-center items-center">
-        <Image src="/dp.jpg" width={100} height={100} className="rounded-full" alt="Creator Image"/>
-        <div><Link href={``} ></Link></div>
+        <Image src="/dp.jpg" width={100} height={100} className="rounded-full" alt="Creator Image" />
+        <div className="mt-4 flex mx-5">
+          <Link href={`https://www.instagram.com/aditya_rwt1/`} target="_blank" className="mx-1" ><Instagram /></Link>
+          <Link href={`https://github.com/adityarwt1`} target="_blank" className="mx-1" ><Github /></Link>
+          </div>
+          <div>I creatod the whole website and route and also write the backend code.</div>
       </div>
 
       {/* Our Story */}
