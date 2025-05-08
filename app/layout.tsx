@@ -5,6 +5,7 @@ import "./globals.css"
 import { ClerkProvider } from "@clerk/nextjs"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
+import Head from "next/head"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -22,6 +23,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+      <Head>
+          <link rel="icon" href="/favicon.ico" />
+          {/* You can also specify additional meta tags here */}
+        </Head>
         <body className={inter.className}>
           <Navbar />
           <main>{children}</main>
