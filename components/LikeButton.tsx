@@ -8,7 +8,7 @@ const LikeButton = async ({ initialLikes, recipieId }: { initialLikes: number, r
 
     const [likes, setLikes] = useState(initialLikes)
     const [liked, setLiked] = useState(false)
-    const { username } = useUser()
+    const { username } =await useUser()
 
     const handleLike = async ()=>{
     const response = await fetch(`/api/recipes/like?recipieId=${recipieId}&username=${username}`, {
