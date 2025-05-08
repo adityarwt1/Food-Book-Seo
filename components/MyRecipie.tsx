@@ -3,41 +3,51 @@ import Link from "next/link"
 import { Edit, Trash2, Plus } from "lucide-react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
+import MyRecipieSkeleton from "./MyRecipieSkeleton"
 
 interface Username {
   username: string
 }
-const MyRecipie : React.FC<Username> = ({username})=> {
+const MyRecipie: React.FC<Username> = ({ username }) => {
 
-  const [recipes , setRecipes] = useState([])
+  const [recipes, setRecipes] = useState([])
+  const [isLoading, setIsloading] = useState(true)
 
-  
+
 
   // Connect to the database
-  const fetchRecipie = async ()=>{
-    const response = await fetch(`/api/fetchrecipie?author=${username}`,{
-      method: "GET"
-    })
-    const data = await response.json()
-    console.log(data)
-    if(response.ok){
-      setRecipes(data.recipes)
+  const fetchRecipie = async () => {
+    try {
+      const response = await fetch(`/api/fetchrecipie?author=${username}`, {
+        method: "GET"
+      })
+      const data = await response.json()
+      console.log(data)
+      if (response.ok) {
+        setRecipes(data.recipes)
+      }
+    }
+    catch (error) {
+      console.log(error)
+    }
+    finally {
+      setIsloading(false)
     }
   }
 
 
-  const handleDelete = async (id: string)=>{
-    const response = await fetch(`/api/recipes/delete?id=${id}`,{
+  const handleDelete = async (id: string) => {
+    const response = await fetch(`/api/recipes/delete?id=${id}`, {
       method: "DELETE"
     })
-    if( response.ok ) {
+    if (response.ok) {
       fetchRecipie()
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchRecipie()
-  },[])
+  }, [])
 
   if (!username) {
     return (
@@ -50,7 +60,7 @@ const MyRecipie : React.FC<Username> = ({username})=> {
     )
   }
 
- 
+
 
   const skeletonCard = (
     <div className="bg-white rounded-xl overflow-hidden shadow-sm animate-pulse">
@@ -88,27 +98,9 @@ const MyRecipie : React.FC<Username> = ({username})=> {
           </Link>
         </div>
 
-        {!recipes ? (
-          <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i}>{skeletonCard}</div>
-            ))}
-          </div>
-
-          <div className="bg-white rounded-xl p-8 text-center">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">You haven't added any recipes yet</h2>
-            <p className="text-gray-500 mb-6">Start building your collection by adding your favorite recipes.</p>
-            <Link
-              href="/add-recipe"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors"
-            >
-              <Plus size={18} />
-              <span>Add Your First Recipe</span>
-            </Link>
-          </div>
-          </div>
-        ): ( <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {isLoading ? (
+          <MyRecipieSkeleton />
+        ) : (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {recipes.map((recipe) => (
             <div key={recipe._id} className="bg-white rounded-xl overflow-hidden shadow-sm">
               <div className="h-48 bg-gray-200 relative">
@@ -143,7 +135,7 @@ const MyRecipie : React.FC<Username> = ({username})=> {
                       <Edit size={18} />
                     </Link>
                     <button
-                      onClick={()=> handleDelete(recipe._id)}
+                      onClick={() => handleDelete(recipe._id)}
                       className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                     >
                       <Trash2 size={18} />
@@ -154,7 +146,7 @@ const MyRecipie : React.FC<Username> = ({username})=> {
             </div>
           ))}
         </div>
-) }
+        )}
 
       </div>
     </div>
