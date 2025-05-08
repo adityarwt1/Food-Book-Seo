@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { ArrowRight, Heart, Utensils, Users } from "lucide-react"
+import Image from "next/image"
 
 export default function AboutPage() {
   return (
@@ -16,6 +17,10 @@ export default function AboutPage() {
           </p>
         </div>
       </section>
+      <div className="flex flex-col justify-center items-center">
+        <Image src="/dp.jpg" width={100} height={100} className="rounded-full" alt="Creator Image"/>
+        <div><Link href={``} ></Link></div>
+      </div>
 
       {/* Our Story */}
       <section className="py-16 px-4 bg-white">
