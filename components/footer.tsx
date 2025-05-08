@@ -5,14 +5,14 @@ export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {/* Logo and Description */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <BookOpen className="h-8 w-8 text-amber-500" />
               <span className="font-bold text-xl">FoodBook</span>
             </div>
-            <p className="text-gray-400 mb-4">
+            <p className="text-gray-400 mb-4 text-sm sm:text-base">
               Your personal cookbook in the cloud. Save your favorite recipes, discover new ones, and share with friends
               and family.
             </p>
@@ -84,10 +84,12 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400 text-sm">
+        {/* Bottom Line */}
+        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400 text-xs sm:text-sm">
           <p>&copy; {new Date().getFullYear()} FoodBook. All rights reserved.</p>
         </div>
       </div>
     </footer>
+
   )
 }

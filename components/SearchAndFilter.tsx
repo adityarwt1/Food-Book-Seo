@@ -9,7 +9,7 @@ const SearchandFilter = () => {
   const router = useRouter()
   const [query, setQuery] = useState(searchParams.get("query") || "")
   const [category, setCategory] = useState(searchParams.get("category") || "")
-  
+
   const categories = [
     { _id: "1", name: "Appetizers & Starters", slug: "appetizers-starters" },
     { _id: "2", name: "Soups & Stews", slug: "soups-stews" },
@@ -24,16 +24,16 @@ const SearchandFilter = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       const params = new URLSearchParams()
-      
+
       if (query) params.set("query", query)
       else params.delete("query")
-      
+
       if (category) params.set("category", category)
       else params.delete("category")
-    if (category == "all"){
-      params.delete("category")
-    }
-      
+      if (category == "all") {
+        params.delete("category")
+      }
+
       router.push(`?${params.toString()}`)
     }, 500)
 
@@ -42,7 +42,8 @@ const SearchandFilter = () => {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm mb-8">
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Search Input */}
         <div className="flex-1 relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-5 w-5 text-gray-400" />
@@ -55,11 +56,13 @@ const SearchandFilter = () => {
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <div className="flex gap-2">
+
+        {/* Category Dropdown and Reset Button */}
+        <div className="flex gap-2 flex-col sm:flex-row w-full sm:w-auto">
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            className="block w-full sm:w-48 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           >
             <option value="all">All Categories</option>
             {categories.map((cat) => (
@@ -68,7 +71,8 @@ const SearchandFilter = () => {
               </option>
             ))}
           </select>
-          <button 
+
+          <button
             onClick={() => {
               setQuery("");
               setCategory("");
@@ -76,11 +80,12 @@ const SearchandFilter = () => {
             className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-md hover:bg-amber-600 transition-colors"
           >
             <Filter size={18} />
-            <span className="hidden md:inline">Reset</span>
+            <span className="hidden sm:inline">Reset</span>
           </button>
         </div>
       </div>
     </div>
+
   )
 }
 

@@ -20,13 +20,13 @@ export default function RecipesPage() {
     try {
       setLoading(true);
       let url = "/api/fetchrecipie?";
-      
+
       if (category) url += `category=${category}&`;
       if (query) url += `query=${query}`;
-      
+
       const response = await fetch(url, { method: "GET" });
       const data = await response.json();
-      
+
       if (response.ok) {
         setRecipes(data.recipes);
       }
@@ -41,15 +41,16 @@ export default function RecipesPage() {
     fetchRecipes();
   }, [category, query])
 
-  
-
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-6xl mx-auto">
+        {/* Page Header */}
         <h1 className="text-3xl font-bold text-gray-900 mb-8">All Recipes</h1>
 
+        {/* Search and Filter */}
         <SearchandFilter />
-        
+
+        {/* Loading State or No Recipes Found or Display Recipes */}
         {loading ? (
           <RecipeGridSkeleton />
         ) : recipes.length === 0 ? (
@@ -61,7 +62,8 @@ export default function RecipesPage() {
         )}
       </div>
     </div>
-  )
+  );
+
 }
 
 function RecipeGridSkeleton() {
