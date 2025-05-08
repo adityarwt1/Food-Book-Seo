@@ -58,7 +58,7 @@ export default async function RecipeDetailPage({
               </button>
              
             
-              <LikeButtlon initialLikes={recipe.likes} recipieId={id}/>
+              <LikeButton initialLikes={recipe.likes} recipieId={id}/>
 
               {recipe.author === user?.username && (
                 <Link

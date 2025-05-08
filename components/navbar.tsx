@@ -14,9 +14,11 @@ export default function Navbar() {
   const [showSearch, setShowsearch] = useState(false)
 
   const handleSearch = async () =>{
+    if(value.length > 2){
     const url = `/recipes?query=${value}`
 
     router.push(url)
+  }
   }
 
   useEffect(()=>{
