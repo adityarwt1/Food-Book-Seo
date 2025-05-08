@@ -31,7 +31,7 @@ export default function Navbar() {
 
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-10">
+    <nav className="bg-white shadow-sm sticky top-0 z-10 overflow-hidden">
     <div className="max-w-6xl mx-auto px-4">
       <div className="flex justify-between items-center h-16">
         {/* Logo */}
