@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
         },
             {
                 $inc: {
-                    likes: -1
+                    likes: +1
                 },
                 $push:{
                     likedBy: username
