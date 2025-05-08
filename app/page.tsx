@@ -5,19 +5,28 @@ import { useEffect, useState } from "react"
 import connectDB from "@/lib/db"
 import Recipe from "@/models/FeatruredRecipie"
 import Image from "next/image"
+import LoadingSkeleton from "@/components/LoadingSkeleton"
 
 export default function Home() {
   const [featuredRecipes, setFeaturedRecipes] = useState([])
+  const [loading, setLoading] = useState(true)
 
   const recipefetch = async () => {
-    const response = await fetch("/api/fetchrecipie", {
-      method: "GET"
-    })
-    const data = await response.json()
+    try {
+      const response = await fetch("/api/fetchrecipie", {
+        method: "GET"
+      })
+      const data = await response.json()
 
-    if (response.ok)
-      setFeaturedRecipes(data.recipes)
-
+      if (response.ok)
+        setFeaturedRecipes(data.recipes)
+    }
+    catch (error) {
+      console.log(error)
+    }
+    finally {
+      setLoading(false)
+    }
   }
   useEffect(() => {
     recipefetch()
@@ -85,47 +94,52 @@ export default function Home() {
               View All <ArrowRight size={16} />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredRecipes.slice(3, 6).map((recipe) => (
-              <Link
-                key={recipe._id}
-                href={`/recipes/${recipe._id}`}
-                className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="h-48 bg-gray-200 relative">
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400 overflow-hidden">
-                    <Image
-                      src={recipe.image || `/rajma-chawal-1.jpg`}
-                      width={500}
-                      height={500}
-                      alt="Recipe image"
-                      className="object-cover w-full h-full"
-                    />
+          {loading ? (
+            <LoadingSkeleton />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredRecipes.slice(3, 6).map((recipe) => (
+                <Link
+                  key={recipe._id}
+                  href={`/recipes/${recipe._id}`}
+                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="h-48 bg-gray-200 relative">
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-400 overflow-hidden">
+                      <Image
+                        src={recipe.image || `/rajma-chawal-1.jpg`}
+                        width={500}
+                        height={500}
+                        alt="Recipe image"
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="px-3 py-1 bg-amber-100 text-amber-600 text-xs font-medium rounded-full">
-                      {recipe.category}
-                    </span>
-                    <span className="text-gray-500 text-sm">
-                      {recipe.time} mins
-                    </span>
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="px-3 py-1 bg-amber-100 text-amber-600 text-xs font-medium rounded-full">
+                        {recipe.category}
+                      </span>
+                      <span className="text-gray-500 text-sm">
+                        {recipe.time} mins
+                      </span>
+                    </div>
+                    <h3 className="font-bold text-xl mb-2 text-gray-900">
+                      {recipe.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm line-clamp-2">
+                      {recipe.description}
+                    </p>
                   </div>
-                  <h3 className="font-bold text-xl mb-2 text-gray-900">
-                    {recipe.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm line-clamp-2">
-                    {recipe.description}
-                  </p>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
 
-          </div>
+            </div>
+          )
+          }
         </div>
       </section>
-    </div>
+    </div >
   )
 }
 
