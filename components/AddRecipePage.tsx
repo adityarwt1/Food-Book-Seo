@@ -168,7 +168,7 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
       },
       body: JSON.stringify({ formData, username, userId, imageUrl })
     })
-    console.log({formData, username , userId, imageUrl })
+    console.log({ formData, username, userId, imageUrl })
     const data = await response.json()
     if (response.ok) {
       setSuccess(data.success)
@@ -256,18 +256,18 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-sm p-6 md:p-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Add New Recipe</h1>
+    <div className="min-h-screen bg-gray-50 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-sm p-4 sm:p-6 md:p-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Add New Recipe</h1>
 
-        {error && <div className="bg-red-50 text-red-600 p-4 rounded-md mb-6">{error}</div>}
-        {success && <div className="bg-green-50 text-green-600 p-4 rounded-md mb-6">{success}</div>}
+        {error && <div className="bg-red-50 text-red-600 p-3 sm:p-4 rounded-md mb-4 sm:mb-6">{error}</div>}
+        {success && <div className="bg-green-50 text-green-600 p-3 sm:p-4 rounded-md mb-4 sm:mb-6">{success}</div>}
 
         <form onSubmit={handleSubmit}>
           {/* Basic Info */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Basic Information</h2>
-            <div className="space-y-4">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Basic Information</h2>
+            <div className="space-y-3 sm:space-y-4">
               <div>
                 <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
                   Recipe Title
@@ -278,7 +278,7 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                   placeholder="Enter recipe title"
                   required
                 />
@@ -294,13 +294,13 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
                   value={formData.description}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                   placeholder="Briefly describe your recipe"
                   required
                 ></textarea>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
                     Category
@@ -310,7 +310,7 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     required
                   >
                     <option value="">Select a category</option>
@@ -333,14 +333,14 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
                     value={formData.servings}
                     onChange={handleChange}
                     min="1"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     placeholder="Number of servings"
                     required
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label htmlFor="prepTime" className="block text-sm font-medium text-gray-700 mb-1">
                     Prep Time (minutes)
@@ -352,7 +352,7 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
                     value={formData.prepTime}
                     onChange={handleChange}
                     min="0"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     placeholder="Preparation time"
                     required
                   />
@@ -369,7 +369,7 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
                     value={formData.cookTime}
                     onChange={handleChange}
                     min="0"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     placeholder="Cooking time"
                     required
                   />
@@ -385,7 +385,7 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
                   name="difficulty"
                   value={formData.difficulty}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                 >
                   <option value="Easy">Easy</option>
                   <option value="Medium">Medium</option>
@@ -396,30 +396,30 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
           </div>
 
           {/* Recipe Image */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Recipe Image</h2>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Recipe Image</h2>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-6 text-center">
               <div className="flex flex-col items-center">
                 {imageUrl ? (
-                  <div className="mb-4">
+                  <div className="mb-3 sm:mb-4">
                     <Image
                       src={imageUrl}
                       alt="Preview"
                       width={200}
                       height={200}
-                      className="rounded-lg object-cover"
+                      className="rounded-lg object-cover w-full h-auto max-w-xs"
                     />
                   </div>
                 ) : (
                   <>
-                    <Upload className="h-12 w-12 text-gray-400 mb-2" />
-                    <p className="text-sm text-gray-500 mb-2">Drag and drop an image here, or click to select a file</p>
-                    <p className="text-xs text-gray-400 mb-4">PNG, JPG or JPEG (max. 5MB)</p>
+                    <Upload className="h-10 w-10 sm:h-12 sm:w-12 text-gray-400 mb-2" />
+                    <p className="text-xs sm:text-sm text-gray-500 mb-2">Drag and drop an image here, or click to select a file</p>
+                    <p className="text-xs text-gray-400 mb-3 sm:mb-4">PNG, JPG or JPEG (max. 5MB)</p>
                   </>
                 )}
                 <label
                   htmlFor="image-upload"
-                  className="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent cursor-pointer"
+                  className="px-3 sm:px-4 py-1 sm:py-2 bg-white border border-gray-300 rounded-md text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent cursor-pointer transition-colors"
                 >
                   {imageUrl ? "Change Image" : "Select Image"}
                 </label>
@@ -435,16 +435,16 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
           </div>
 
           {/* Ingredients */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Ingredients</h2>
-            <div className="space-y-3">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Ingredients</h2>
+            <div className="space-y-2 sm:space-y-3">
               {formData.ingredients.map((ingredient, index) => (
-                <div key={index} className="flex gap-2">
+                <div key={index} className="flex gap-2 items-center">
                   <input
                     type="text"
                     value={ingredient}
                     onChange={(e) => handleIngredientChange(index, e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="flex-1 px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     placeholder={`Ingredient ${index + 1}`}
                     required
                   />
@@ -457,75 +457,75 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
                       : "bg-red-50 text-red-500 hover:bg-red-100"
                       }`}
                   >
-                    <Minus size={18} />
+                    <Minus size={16} className="sm:w-4 sm:h-4" />
                   </button>
                 </div>
               ))}
               <button
                 type="button"
                 onClick={addIngredient}
-                className="flex items-center gap-1 text-amber-500 hover:text-amber-600 font-medium"
+                className="flex items-center gap-1 text-xs sm:text-sm text-amber-500 hover:text-amber-600 font-medium"
               >
-                <Plus size={18} />
+                <Plus size={16} className="sm:w-4 sm:h-4" />
                 <span>Add Ingredient</span>
               </button>
             </div>
           </div>
 
           {/* Instructions */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Instructions</h2>
-            <div className="space-y-4">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Instructions</h2>
+            <div className="space-y-3 sm:space-y-4">
               {formData.instructions.map((instruction, index) => (
-                <div key={index} className="flex gap-2 items-center">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold">
+                <div key={index} className="flex gap-2 items-start">
+                  <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-xs sm:text-sm">
                     {index + 1}
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 flex gap-2">
                     <textarea
                       value={instruction}
                       onChange={(e) => handleInstructionChange(index, e.target.value)}
                       rows={2}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                       placeholder={`Step ${index + 1}`}
                       required
                     ></textarea>
+                    <button
+                      type="button"
+                      onClick={() => removeInstruction(index)}
+                      disabled={formData.instructions.length === 1}
+                      className={`p-2 rounded-md ${formData.instructions.length === 1
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-red-50 text-red-500 hover:bg-red-100"
+                        }`}
+                    >
+                      <Minus size={16} className="sm:w-4 sm:h-4" />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => removeInstruction(index)}
-                    disabled={formData.instructions.length === 1}
-                    className={`p-2 rounded-md ${formData.instructions.length === 1
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-red-50 text-red-500 hover:bg-red-100"
-                      }`}
-                  >
-                    <Minus size={18} />
-                  </button>
                 </div>
               ))}
               <button
                 type="button"
                 onClick={addInstruction}
-                className="flex items-center gap-1 text-amber-500 hover:text-amber-600 font-medium"
+                className="flex items-center gap-1 text-xs sm:text-sm text-amber-500 hover:text-amber-600 font-medium"
               >
-                <Plus size={18} />
+                <Plus size={16} className="sm:w-4 sm:h-4" />
                 <span>Add Step</span>
               </button>
             </div>
           </div>
 
           {/* Tags */}
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Tags</h2>
-            <div className="space-y-3">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Tags</h2>
+            <div className="space-y-2 sm:space-y-3">
               {formData.tags.map((tag, index) => (
-                <div key={index} className="flex gap-2">
+                <div key={index} className="flex gap-2 items-center">
                   <input
                     type="text"
                     value={tag}
                     onChange={(e) => handleTagChange(index, e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="flex-1 px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                     placeholder={`Tag ${index + 1} (e.g., vegan, spicy, dessert)`}
                   />
                   <button
@@ -537,16 +537,16 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
                       : "bg-red-50 text-red-500 hover:bg-red-100"
                       }`}
                   >
-                    <Minus size={18} />
+                    <Minus size={16} className="sm:w-4 sm:h-4" />
                   </button>
                 </div>
               ))}
               <button
                 type="button"
                 onClick={addTag}
-                className="flex items-center gap-1 text-amber-500 hover:text-amber-600 font-medium"
+                className="flex items-center gap-1 text-xs sm:text-sm text-amber-500 hover:text-amber-600 font-medium"
               >
-                <Plus size={18} />
+                <Plus size={16} className="sm:w-4 sm:h-4" />
                 <span>Add Tag</span>
               </button>
             </div>
@@ -557,7 +557,7 @@ const AddRecipePage: React.FC<UsernameUserId> = ({ username, userId }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`px-6 py-3 bg-amber-500 text-white rounded-md font-medium hover:bg-amber-600 transition-colors ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+              className={`px-4 sm:px-6 py-2 sm:py-3 bg-amber-500 text-white rounded-md text-sm sm:text-base font-medium hover:bg-amber-600 transition-colors ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
             >
               {isLoading ? "Saving..." : "Save Recipe"}
             </button>

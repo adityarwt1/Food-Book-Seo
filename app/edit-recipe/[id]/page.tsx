@@ -10,7 +10,7 @@ export default async function EditRecipePage({
 }: {
   params: { id: string }
 }) {
-  const { id } = await  params;
+  const { id } = await params;
 
   await connectDB();
   const recipe = await Recipe.findOne({ _id: id });
@@ -20,17 +20,22 @@ export default async function EditRecipePage({
   }
 
   return (
-    <div className="min-h-screen bg-white py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto w-full">
+
         {/* Back Button */}
-        <Link href="/recipes" className="inline-flex items-center text-amber-500 hover:text-amber-600 mb-6">
-          <ChevronLeft size={20} />
-          <span>Back to recipes</span>
+        <Link
+          href="/recipes"
+          className="inline-flex items-center text-amber-500 hover:text-amber-600 mb-6 transition duration-200"
+        >
+          <ChevronLeft size={20} className="mr-1" />
+          <span className="text-sm sm:text-base">Back to recipes</span>
         </Link>
 
         {/* Edit Form */}
         <EditRecipeForm recipe={JSON.parse(JSON.stringify(recipe))} />
       </div>
     </div>
+
   );
 }
