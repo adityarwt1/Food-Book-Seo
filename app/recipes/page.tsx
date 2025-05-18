@@ -1,20 +1,20 @@
-"use client"
-import Link from "next/link"
-import { ConstructionIcon, Filter, Search } from "lucide-react"
-import Image from "next/image"
-import { Suspense, useEffect, useState } from "react"
-import RecipeCardSkeleton from "@/components/RecipeCardSkeleton"
-import SearchandFilter from "@/components/SearchAndFilter"
-import RecipeGrid from '@/components/RecipeGrid'
-import { useSearchParams } from "next/navigation"
+"use client";
+import Link from "next/link";
+import { ConstructionIcon, Filter, Search } from "lucide-react";
+import Image from "next/image";
+import { Suspense, useEffect, useState } from "react";
+import RecipeCardSkeleton from "@/components/RecipeCardSkeleton";
+import SearchandFilter from "@/components/SearchAndFilter";
+import RecipeGrid from "@/components/RecipeGrid";
+import { useSearchParams } from "next/navigation";
 
 export default function RecipesPage() {
-  const searchParams = useSearchParams()
-  const [recipes, setRecipes] = useState([])
-  const [loading, setLoading] = useState(true)
+  const searchParams = useSearchParams();
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const category = searchParams.get("category")
-  const query = searchParams.get("query")
+  const category = searchParams.get("category");
+  const query = searchParams.get("query");
 
   const fetchRecipes = async () => {
     try {
@@ -29,17 +29,18 @@ export default function RecipesPage() {
 
       if (response.ok) {
         setRecipes(data.recipes);
+        console.log(data.recipes);
       }
     } catch (error) {
       console.error("Error fetching recipes:", error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchRecipes();
-  }, [category, query])
+  }, [category, query]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -55,7 +56,9 @@ export default function RecipesPage() {
           <RecipeGridSkeleton />
         ) : recipes.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500">No recipes found. Try a different search.</p>
+            <p className="text-gray-500">
+              No recipes found. Try a different search.
+            </p>
           </div>
         ) : (
           <RecipeGrid recipes={recipes} />
@@ -63,7 +66,6 @@ export default function RecipesPage() {
       </div>
     </div>
   );
-
 }
 
 function RecipeGridSkeleton() {
@@ -73,5 +75,5 @@ function RecipeGridSkeleton() {
         <RecipeCardSkeleton key={i} />
       ))}
     </div>
-  )
+  );
 }
