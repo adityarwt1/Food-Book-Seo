@@ -1,31 +1,31 @@
-"use client"
-import Link from "next/link"
-import { ArrowRight, UtensilsCrossed } from "lucide-react"
-import { useEffect, useState } from "react"
-import Image from "next/image"
-import LoadingSkeleton from "@/components/LoadingSkeleton"
+"use client";
+import Link from "next/link";
+import { ArrowRight, UtensilsCrossed } from "lucide-react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 export default function Home() {
-  const [featuredRecipes, setFeaturedRecipes] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [featuredRecipes, setFeaturedRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const recipefetch = async () => {
     try {
       const response = await fetch("/api/fetchrecipie", {
-        method: "GET"
-      })
-      const data = await response.json()
-      if (response.ok) setFeaturedRecipes(data.recipes)
+        method: "GET",
+      });
+      const data = await response.json();
+      if (response.ok) setFeaturedRecipes(data.recipes);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    recipefetch()
-  }, [])
+    recipefetch();
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -33,10 +33,12 @@ export default function Home() {
       <section className="py-16 px-4 sm:px-6 md:px-10 bg-gradient-to-b from-amber-50 to-white">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Discover & Share <span className="text-amber-500">Amazing Recipes</span>
+            Discover & Share{" "}
+            <span className="text-amber-500">Amazing Recipes</span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Your personal cookbook in the cloud. Save your favorite recipes, discover new ones, and share with friends and family.
+            Your personal cookbook in the cloud. Save your favorite recipes,
+            discover new ones, and share with friends and family.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -58,7 +60,9 @@ export default function Home() {
       {/* Popular Categories */}
       <section className="py-16 px-4 sm:px-6 md:px-10 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-10 text-center">Popular Categories</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-10 text-center">
+            Popular Categories
+          </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
             {categories.map((category) => (
               <Link
@@ -80,7 +84,9 @@ export default function Home() {
       <section className="py-16 px-4 sm:px-6 md:px-10 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Featured Recipes</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              Featured Recipes
+            </h2>
             <Link
               href="/recipes"
               className="text-amber-500 font-medium flex items-center gap-1 hover:text-amber-600 transition-colors"
@@ -130,7 +136,7 @@ export default function Home() {
         </div>
       </section>
     </div>
-  )
+  );
 }
 
 const categories = [
@@ -138,4 +144,4 @@ const categories = [
   { id: 2, name: "Main Dishes", count: 36, slug: "main-dishes" },
   { id: 3, name: "Desserts", count: 18, slug: "desserts" },
   { id: 4, name: "Vegetarian", count: 12, slug: "vegetarian" },
-]
+];
