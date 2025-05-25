@@ -5,7 +5,6 @@ import React, { use, useEffect, useState } from "react";
 import { Menu, X, Search, BookOpen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getUserInfo, logoutUser } from "@/action/my-action";
-import Image from "next/image";
 
 interface User {
   name: string;
@@ -35,12 +34,13 @@ export default function Navbar() {
 
       if (!user) {
         console.log("not found user info");
+        setIsloaded(true);
       }
 
       if (user) {
         setUserInfo(user);
         setIssignedin(!isSignedIn);
-        setIsloaded(!isLoaded);
+        setIsloaded(true);
       }
     } catch (error) {
       console.log("failed to get the user information");
