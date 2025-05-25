@@ -2,7 +2,6 @@ import connectDB from "@/lib/db";
 import { User } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 
 interface existingUser {
@@ -30,7 +29,7 @@ export async function POST(req: NextRequest) {
 
     const isPasswordValid = await bcrypt.compare(
       password,
-      existingUser.password
+      existingUser?.password
     );
 
     if (!isPasswordValid) {
@@ -57,13 +56,7 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
 
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-    });
+    response.cookies.set("token", token);
 
     return response;
   } catch (error) {
