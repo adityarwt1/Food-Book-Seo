@@ -1,8 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
 import { Recipe } from "@/models";
-import { auth } from "@clerk/nextjs/server";
-import { getOrCreateUser } from "@/lib/utils/auth";
 
 // // POST a new recipe
 export async function POST(request: NextRequest) {

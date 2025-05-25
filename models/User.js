@@ -1,22 +1,17 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
     clerkId: {
       type: String,
-      required: true,
       unique: true,
     },
-    firstName: {
+    name: {
       type: String,
-      required: [true, "Please provide a first name"],
+      required: [true, "Please provide full Name"],
       maxlength: [50, "Name cannot be more than 50 characters"],
     },
-    lastName: {
-      type: String,
-      required: [true, "Please provide a last name"],
-      maxlength: [50, "Name cannot be more than 50 characters"],
-    },
+
     email: {
       type: String,
       required: [true, "Please provide an email"],
@@ -46,8 +41,8 @@ const UserSchema = new mongoose.Schema(
       default: "user",
     },
   },
-  { timestamps: true },
-)
+  { timestamps: true }
+);
 
 // Create a virtual field for user's recipes
 UserSchema.virtual("recipes", {
@@ -55,7 +50,7 @@ UserSchema.virtual("recipes", {
   localField: "_id",
   foreignField: "author",
   justOne: false,
-})
+});
 
 // Don't create the model if it already exists
-export default mongoose.models.User || mongoose.model("User", UserSchema)
+export default mongoose.models.User || mongoose.model("User", UserSchema);
