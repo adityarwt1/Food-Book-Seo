@@ -8,17 +8,17 @@ export async function POST(request: NextRequest) {
     await dbConnect();
 
     // Check if user is authenticated
-    const { formData, userId, username, imageUrl } = await request.json();
-    if (!username) {
+    const { formData, email, imageUrl } = await request.json();
+    if (!email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Create the recipe
     const recipe = await Recipe.create({
       ...formData,
-      username,
+      email,
       image: imageUrl,
-      author: username,
+      author: email,
     });
     await recipe.save();
     if (!recipe) {

@@ -1,15 +1,16 @@
-import AddRecipePage from '@/components/AddRecipePage'
-import { auth, currentUser } from '@clerk/nextjs/server'
-import React from 'react'
+import { getUserInfo } from "@/action/my-action";
+import AddRecipePage from "@/components/AddRecipePage";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import React from "react";
 
 const page = async () => {
-  const {userId, username} = await currentUser()
-  
+  const { email, name } = await getUserInfo();
+
   return (
     <>
-    <AddRecipePage userId={userId} username={username}/>
+      <AddRecipePage email={email} name={name} />
     </>
-  )
-}
+  );
+};
 
-export default page
+export default page;
