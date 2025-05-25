@@ -4,7 +4,14 @@ import { ArrowRight, UtensilsCrossed } from "lucide-react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
-
+interface Recipe {
+  _id: string;
+  image: string;
+  category: string;
+  time: string;
+  title: string;
+  description: string
+}
 export default function Home() {
   const [featuredRecipes, setFeaturedRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -98,7 +105,7 @@ export default function Home() {
             <LoadingSkeleton />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredRecipes.slice(3, 6).map((recipe) => (
+              {featuredRecipes.slice(3, 6).map((recipe: Recipe) => (
                 <Link
                   key={recipe._id}
                   href={`/recipes/${recipe._id}`}
