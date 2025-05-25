@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
     await connectDB();
 
     const { email, password } = await req.json();
+    console.log({ email, password });
 
     const existingUser: existingUser | null = await User.findOne({ email });
 
@@ -27,46 +28,46 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const passwordTrueorNot = bcrypt.compare(password, existingUser?.password);
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
 
-    if (!passwordTrueorNot) {
+    if (!isPasswordValid) {
       return NextResponse.json(
         { message: "Incorrect Password" },
         { status: 401 }
       );
     }
+
     const tokenPayload = {
-      id: existingUser?._id,
-      name: existingUser?.name,
-      email: existingUser?.email,
-      profileImage: existingUser?.profileImage,
+      id: existingUser._id,
+      name: existingUser.name,
+      email: existingUser.email,
+      profileImage: existingUser.profileImage,
     };
 
-    try {
-      const token = jwt.sign(tokenPayload, process.env.JWT_SECRET as string, {
-        expiresIn: "7d",
-        issuer: "Aditya Rawat",
-      });
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET as string, {
+      expiresIn: "7d",
+      issuer: "Aditya Rawat",
+    });
 
-      (await cookies()).set("token", token, {
-        httpOnly: true,
-        maxAge: 30 * 24 * 60 * 60,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: true,
-        path: "/",
-        domain: "https://foodbook-xi.vercel.app/",
-        expires: 7 * 24 * 60 * 60,
-      });
-    } catch (error) {
-      console.log("unable to save to cookies", error);
-    }
-
-    return NextResponse.json(
+    const response = NextResponse.json(
       { message: "Login Successfully" },
       { status: 200 }
     );
+
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
-    console.log("error will login");
+    console.error("Error during login:", error);
     return NextResponse.json(
       { message: "Internal server issue" },
       { status: 500 }

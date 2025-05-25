@@ -11,10 +11,7 @@ const Page = () => {
   const fetchUserInfo = async () => {
     try {
       const user = await getUserInfo();
-      if (!user) {
-        router.push("/login");
-        return;
-      }
+
       setEmail(user.email);
     } catch (error) {
       console.log("error in my recipes", error);

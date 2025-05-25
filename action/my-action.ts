@@ -1,6 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+
 export async function getUserInfo() {
   try {
     const token = (await cookies()).get("token")?.value;
@@ -9,14 +10,18 @@ export async function getUserInfo() {
       return null;
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    if (!decoded) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+      return decoded;
+    } catch (jwtError) {
+      // If token is invalid, delete it and return null
+      (await cookies()).delete("token");
       return null;
     }
-
-    return decoded;
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error in getUserInfo:", error);
+    return null;
+  }
 }
 
 export async function logoutUser() {

@@ -16,7 +16,7 @@ interface User {
 export default function Navbar() {
   const router = useRouter();
   const [isSignedIn, setIssignedin] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoaded, setIsloaded] = useState(false);
   const [value, setValue] = useState("");
   const [user, setUserInfo] = useState<User>({

@@ -3,7 +3,6 @@
 import type React from "react";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -42,8 +41,9 @@ export default function LoginPage() {
       const data = await result.json();
       if (!result.ok) {
         setError(data.message);
-      } else {
-        router.push(callbackUrl);
+      }
+      if (result.ok) {
+        router.push("/recipes");
       }
     } catch (err: any) {
       setError(err.message || "An error occurred during login");
