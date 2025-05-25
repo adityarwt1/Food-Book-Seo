@@ -17,9 +17,8 @@ type Category = {
 
 interface name {
   email: string;
-  name: string;
 }
-const AddRecipePage: React.FC<name> = ({ email, name }) => {
+const AddRecipePage: React.FC<name> = ({ email }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");

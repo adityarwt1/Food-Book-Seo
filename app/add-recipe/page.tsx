@@ -1,14 +1,18 @@
 import { getUserInfo } from "@/action/my-action";
 import AddRecipePage from "@/components/AddRecipePage";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import React from "react";
 
 const page = async () => {
-  const { email, name } = await getUserInfo();
+  const user = await getUserInfo();
+
+  if (!user) {
+    redirect("/login");
+  }
 
   return (
     <>
-      <AddRecipePage email={email} name={name} />
+      <AddRecipePage email={user?.email} />
     </>
   );
 };

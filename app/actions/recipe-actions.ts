@@ -3,8 +3,6 @@
 import { revalidatePath } from "next/cache"
 import dbConnect from "@/lib/db"
 import { Recipe, Category } from "@/models"
-import { auth } from "@clerk/nextjs/server"
-import { getOrCreateUser } from "@/lib/utils/auth"
 
 // Type for recipe form data
 type RecipeFormData = {

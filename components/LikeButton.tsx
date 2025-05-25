@@ -1,5 +1,4 @@
 "use client"
-import { useUser } from '@clerk/nextjs'
 import { ThumbsUp } from 'lucide-react'
 import React, { useState } from 'react'
 

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, Upload, Users } from "lucide-react";
-import { useUser } from "@clerk/nextjs";
 
 interface Recipe {
     _id: string;

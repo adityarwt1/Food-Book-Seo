@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server"
 import dbConnect from "@/lib/db"
 import { Recipe } from "@/models"
-import { auth } from "@clerk/nextjs/server"
-import { getOrCreateUser } from "@/lib/utils/auth"
 
 // GET current user's recipes
 export async function GET() {

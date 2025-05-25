@@ -1,40 +1,50 @@
-"use server"
-import Link from "next/link"
-import { Clock, Users, ChevronLeft, Bookmark, Share2, ThumbsUp, Pencil } from "lucide-react"
+"use server";
+import Link from "next/link";
+import {
+  Clock,
+  Users,
+  ChevronLeft,
+  Bookmark,
+  Share2,
+  ThumbsUp,
+  Pencil,
+} from "lucide-react";
 import connectDB from "@/lib/db";
 import { Recipe } from "@/models";
 import Image from "next/image";
-import { currentUser } from "@clerk/nextjs/server";
 import LikeButton from "@/components/LikeButton";
+import { getUserInfo } from "@/action/my-action";
 
 export default async function RecipeDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: { id: string };
 }) {
   const { id } = await params;
 
-  await connectDB()
-  const recipe = await Recipe.findOne({ _id: id })
+  await connectDB();
+  const recipe = await Recipe.findOne({ _id: id });
 
-
-
-  const user = await currentUser()
-
+  const user = await getUserInfo();
 
   if (recipe) {
     return (
       <div className="min-h-screen bg-white py-12 px-4">
         <div className="max-w-4xl mx-auto">
           {/* Back Button */}
-          <Link href="/recipes" className="inline-flex items-center text-amber-500 hover:text-amber-600 mb-6">
+          <Link
+            href="/recipes"
+            className="inline-flex items-center text-amber-500 hover:text-amber-600 mb-6"
+          >
             <ChevronLeft size={20} />
             <span>Back to recipes</span>
           </Link>
 
           {/* Recipe Header */}
           <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{recipe.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {recipe.title}
+            </h1>
             <p className="text-gray-600 mb-6">{recipe.description}</p>
 
             <div className="flex flex-wrap gap-4 mb-6">
@@ -59,28 +69,36 @@ export default async function RecipeDetailPage({
 
               <LikeButton initialLikes={recipe.likes} recipieId={id} />
 
-              {recipe.author === user?.username && (
+              {recipe.author === user?.email && (
                 <Link
-                  href={`/edit-recipe/${recipe._id}?username=${user?.username}`}
+                  href={`/edit-recipe/${recipe._id}?username=${user?.email}`}
                   className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
                 >
-                  <span><Pencil size={18} /></span>
+                  <span>
+                    <Pencil size={18} />
+                  </span>
                   <span>Edit</span>
                 </Link>
               )}
             </div>
-
           </div>
 
           {/* Recipe Image */}
           <div className="h-80 bg-gray-200 rounded-xl mb-8 flex items-center justify-center text-gray-400 overflow-hidden">
-            <Image width={500} height={500} src={recipe.image} alt="recipe image" />
+            <Image
+              width={500}
+              height={500}
+              src={recipe.image}
+              alt="recipe image"
+            />
           </div>
 
           {/* Ingredients and Instructions */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             <div className="md:col-span-1">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Ingredients</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Ingredients
+              </h2>
               <ul className="space-y-3">
                 {recipe.ingredients.map((ingredient: string, index: number) => (
                   <li key={index} className="flex items-start gap-2">
@@ -92,24 +110,28 @@ export default async function RecipeDetailPage({
             </div>
 
             <div className="md:col-span-2">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Instructions</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                Instructions
+              </h2>
               <ol className="space-y-6">
-                {recipe.instructions.map((instruction: string, index: number) => (
-                  <li key={index} className="flex gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold">
-                      {index + 1}
-                    </div>
-                    <div>
-                      <p className="text-gray-700">{instruction}</p>
-                    </div>
-                  </li>
-                ))}
+                {recipe.instructions.map(
+                  (instruction: string, index: number) => (
+                    <li key={index} className="flex gap-4">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold">
+                        {index + 1}
+                      </div>
+                      <div>
+                        <p className="text-gray-700">{instruction}</p>
+                      </div>
+                    </li>
+                  )
+                )}
               </ol>
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
   if (!recipe) {
     return (
@@ -183,7 +205,6 @@ export default async function RecipeDetailPage({
           </div>
         </div>
       </div>
-    )
+    );
   }
-
 }
