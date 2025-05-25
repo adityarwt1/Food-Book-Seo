@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    clerkId: {
-      type: String,
-      unique: true,
-    },
     name: {
       type: String,
       required: [true, "Please provide full Name"],
@@ -35,6 +31,10 @@ const UserSchema = new mongoose.Schema(
         ref: "Recipe",
       },
     ],
+    password: {
+      type: String,
+      required: [true, "please provide the password"],
+    },
     role: {
       type: String,
       enum: ["user", "admin"],

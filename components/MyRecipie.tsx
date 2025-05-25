@@ -1,66 +1,62 @@
-"use client"
-import Link from "next/link"
-import { Edit, Trash2, Plus } from "lucide-react"
-import Image from "next/image"
-import { useEffect, useState } from "react"
-import MyRecipieSkeleton from "./MyRecipieSkeleton"
+"use client";
+import Link from "next/link";
+import { Edit, Trash2, Plus } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import MyRecipieSkeleton from "./MyRecipieSkeleton";
 
 interface Username {
-  username: string
+  email: string;
 }
-const MyRecipie: React.FC<Username> = ({ username }) => {
-
-  const [recipes, setRecipes] = useState([])
-  const [isLoading, setIsloading] = useState(true)
-
-
+const MyRecipie: React.FC<Username> = ({ email }) => {
+  const [recipes, setRecipes] = useState([]);
+  const [isLoading, setIsloading] = useState(true);
 
   // Connect to the database
   const fetchRecipie = async () => {
     try {
-      const response = await fetch(`/api/fetchrecipie?author=${username}`, {
-        method: "GET"
-      })
-      const data = await response.json()
-      console.log(data)
+      const response = await fetch(`/api/fetchrecipie?author=${email}`, {
+        method: "GET",
+      });
+      const data = await response.json();
+      console.log(data);
       if (response.ok) {
-        setRecipes(data.recipes)
+        setRecipes(data.recipes);
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsloading(false);
     }
-    catch (error) {
-      console.log(error)
-    }
-    finally {
-      setIsloading(false)
-    }
-  }
-
+  };
 
   const handleDelete = async (id: string) => {
     const response = await fetch(`/api/recipes/delete?id=${id}`, {
-      method: "DELETE"
-    })
+      method: "DELETE",
+    });
     if (response.ok) {
-      fetchRecipie()
+      fetchRecipie();
     }
-  }
+  };
 
   useEffect(() => {
-    fetchRecipie()
-  }, [])
+    fetchRecipie();
+  }, []);
 
-  if (!username) {
+  if (!email) {
     return (
       <div className="min-h-screen bg-gray-50 py-12 px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Error loading user data</h1>
-          <p>There was a problem loading your profile. Please try again later.</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+            Error loading user data
+          </h1>
+          <p>
+            There was a problem loading your profile. Please try again later.
+          </p>
         </div>
       </div>
-    )
+    );
   }
-
-
 
   const skeletonCard = (
     <div className="bg-white rounded-xl overflow-hidden shadow-sm animate-pulse w-full max-w-md mx-auto sm:max-w-full">
@@ -82,16 +78,16 @@ const MyRecipie: React.FC<Username> = ({ username }) => {
         </div>
       </div>
     </div>
-
   );
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Recipes</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            My Recipes
+          </h1>
           <Link
             href="/add-recipe"
             className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors text-sm sm:text-base"
@@ -107,7 +103,10 @@ const MyRecipie: React.FC<Username> = ({ username }) => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {recipes.map((recipe) => (
-              <div key={recipe._id} className="bg-white rounded-xl overflow-hidden shadow-sm flex flex-col h-full">
+              <div
+                key={recipe._id}
+                className="bg-white rounded-xl overflow-hidden shadow-sm flex flex-col h-full"
+              >
                 {/* Image */}
                 <div className="h-40 sm:h-48 bg-gray-200 relative">
                   <div className="absolute inset-0 flex items-center justify-center text-gray-400 overflow-hidden">
@@ -168,10 +167,8 @@ const MyRecipie: React.FC<Username> = ({ username }) => {
             ))}
           </div>
         )}
-
       </div>
     </div>
-
   );
-}
+};
 export default MyRecipie;

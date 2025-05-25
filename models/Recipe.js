@@ -1,8 +1,11 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const RecipeSchema = new mongoose.Schema(
   {
-    username:{
+    username: {
+      type: String,
+    },
+    email: {
       type: String,
     },
     title: {
@@ -67,13 +70,15 @@ const RecipeSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "Please provide an author"],
     },
-    likes:{
+    likes: {
       type: Number,
       default: 0,
     },
-    likedBy:[{
-      type: String,
-    }],
+    likedBy: [
+      {
+        type: String,
+      },
+    ],
     featured: {
       type: Boolean,
       default: false,
@@ -93,13 +98,13 @@ const RecipeSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  },
-)
+  }
+);
 
 // Create a virtual field for total time
 RecipeSchema.virtual("totalTime").get(function () {
-  return this.prepTime + this.cookTime
-})
+  return this.prepTime + this.cookTime;
+});
 
 // Create a virtual field for reviews
 RecipeSchema.virtual("reviews", {
@@ -107,7 +112,7 @@ RecipeSchema.virtual("reviews", {
   localField: "_id",
   foreignField: "recipe",
   justOne: false,
-})
+});
 
 // Create slug from title before saving
 RecipeSchema.pre("save", function (next) {
@@ -115,18 +120,17 @@ RecipeSchema.pre("save", function (next) {
     this.slug = this.title
       .toLowerCase()
       .replace(/\s+/g, "-")
-      .replace(/[^\w-]+/g, "")
+      .replace(/[^\w-]+/g, "");
   }
-  next()
-})
+  next();
+});
 
 // Add indexes for better query performance
-RecipeSchema.index({ title: "text", description: "text", tags: "text" })
-RecipeSchema.index({ category: 1 })
-RecipeSchema.index({ author: 1 })
-RecipeSchema.index({ featured: 1 })
-RecipeSchema.index({ createdAt: -1 })
+RecipeSchema.index({ title: "text", description: "text", tags: "text" });
+RecipeSchema.index({ category: 1 });
+RecipeSchema.index({ author: 1 });
+RecipeSchema.index({ featured: 1 });
+RecipeSchema.index({ createdAt: -1 });
 
 // Don't create the model if it already exists
-export default mongoose.models.Recipe || mongoose.model("Recipe", RecipeSchema)
- 
+export default mongoose.models.Recipe || mongoose.model("Recipe", RecipeSchema);
