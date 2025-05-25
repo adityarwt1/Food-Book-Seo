@@ -5,15 +5,29 @@ import React, { use, useEffect, useState } from "react";
 import { Menu, X, Search, BookOpen } from "lucide-react";
 import { useUser, UserButton, SignInButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { getUserInfo } from "@/action/my-action";
+import { getUserInfo, logoutUser } from "@/action/my-action";
+import Image from "next/image";
 
+interface User {
+  name: string;
+  email: string;
+  profileImage: string;
+  iss: string;
+  id: string;
+}
 export default function Navbar() {
   const router = useRouter();
   const [isSignedIn, setIssignedin] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [isLoaded, setIsloaded] = useState(false);
   const [value, setValue] = useState("");
-  const [user, setUserInfo] = useState({});
+  const [user, setUserInfo] = useState<User>({
+    name: "",
+    email: "",
+    profileImage: "",
+    iss: "",
+    id: "",
+  });
   const [showSearch, setShowsearch] = useState(false);
 
   const userInformation = async () => {
@@ -51,8 +65,18 @@ export default function Navbar() {
     return () => clearTimeout(timeOut);
   }, [value]);
 
+  const handleLogout = async () => {
+    try {
+      const logout = await logoutUser();
+      if (logout) {
+        router.push("/login");
+      }
+    } catch (error) {
+      console.log("error while logout", error);
+    }
+  };
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-10 overflow-hidden">
+    <nav className="bg-white  shadow-sm sticky top-0 z-10 overflow-hidden">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -123,18 +147,25 @@ export default function Navbar() {
               )}
             </div>
 
-            {!isLoaded ? (
-              <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse"></div>
+            {!  isLoaded ? (
+              <div className="h-8 w-8 rounded-full bg-gray-300 animate-pulse"></div>
             ) : isSignedIn ? (
               <div className="flex items-center gap-2">
                 <span className="hidden md:inline font-medium text-gray-700">
                   {user.name || user.email}
                 </span>
-                <UserButton afterSignOutUrl="/" />
+                <button onClick={handleLogout}>
+                  <Link
+                    href={"#"}
+                    className="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors"
+                  >
+                    Logout
+                  </Link>
+                </button>
               </div>
             ) : (
               <Link
-                href={"/login?callbackUrl=/"}
+                href={"/login"}
                 className="px-4 py-2 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors"
               >
                 Login
@@ -191,11 +222,12 @@ export default function Navbar() {
               About
             </Link>
             {!isSignedIn && (
-              <div className="block px-3 py-2 rounded-md text-base font-medium text-amber-500 hover:bg-amber-50">
-                <SignInButton mode="modal">
-                  <button onClick={() => setIsMenuOpen(false)}>Login</button>
-                </SignInButton>
-              </div>
+              <Link
+                href={"/login"}
+                className="block px-3 py-2 rounded-md text-base font-medium text-amber-500 hover:bg-amber-50"
+              >
+                <button onClick={() => setIsMenuOpen(false)}>Login</button>
+              </Link>
             )}
           </div>
         </div>

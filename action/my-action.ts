@@ -18,3 +18,14 @@ export async function getUserInfo() {
     return decoded;
   } catch (error) {}
 }
+
+export async function logoutUser() {
+  try {
+    (await cookies()).delete("token");
+
+    return true;
+  } catch (error) {
+    console.log("error while logout");
+    return false;
+  }
+}

@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
 
     if (!existingUser) {
       return NextResponse.json(
-        { message: "User does Not exist" },
+        { message: "User does not exist" },
         { status: 404 }
       );
     }

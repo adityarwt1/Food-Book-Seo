@@ -128,7 +128,6 @@ RecipeSchema.pre("save", function (next) {
 // Add indexes for better query performance
 RecipeSchema.index({ title: "text", description: "text", tags: "text" });
 RecipeSchema.index({ category: 1 });
-RecipeSchema.index({ author: 1 });
 RecipeSchema.index({ featured: 1 });
 RecipeSchema.index({ createdAt: -1 });
 

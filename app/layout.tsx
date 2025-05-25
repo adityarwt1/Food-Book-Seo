@@ -1,38 +1,35 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-import { ClerkProvider } from "@clerk/nextjs"
-import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
-import Head from "next/head"
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import Head from "next/head";
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "FoodBook - Your Personal Recipe Collection",
   description: "Discover, save and share your favorite recipes with FoodBook",
-    generator: 'v0.dev'
-}
+  generator: "v0.dev",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
+    <html lang="en">
       <Head>
-          <link rel="icon" href="/favicon.ico" />
-          {/* You can also specify additional meta tags here */}
-        </Head>
-        <body className={inter.className}>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </body>
-      </html>
-    </ClerkProvider>
-  )
+        <link rel="icon" href="/favicon.ico" />
+        {/* You can also specify additional meta tags here */}
+      </Head>
+      <body className={inter.className}>
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
 }
