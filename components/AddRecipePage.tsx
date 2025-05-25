@@ -5,8 +5,6 @@ import { useState, useEffect } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { Plus, Minus, Upload } from "lucide-react";
 import { addRecipe, getCategories } from "@/app/actions/recipe-actions";
-import { useUser } from "@clerk/nextjs";
-import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
 
 type Category = {

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import React, { use, useEffect, useState } from "react";
 import { Menu, X, Search, BookOpen } from "lucide-react";
-import { useUser, UserButton, SignInButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { getUserInfo, logoutUser } from "@/action/my-action";
 import Image from "next/image";
@@ -147,7 +146,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {!  isLoaded ? (
+            {!isLoaded ? (
               <div className="h-8 w-8 rounded-full bg-gray-300 animate-pulse"></div>
             ) : isSignedIn ? (
               <div className="flex items-center gap-2">
