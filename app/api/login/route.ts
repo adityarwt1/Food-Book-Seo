@@ -54,6 +54,8 @@ export async function POST(req: NextRequest) {
         secure: process.env.NODE_ENV === "production",
         sameSite: true,
         path: "/",
+        domain: "https://foodbook-xi.vercel.app/",
+        expires: 7 * 24 * 60 * 60,
       });
     } catch (error) {
       console.log("unable to save to cookies", error);
