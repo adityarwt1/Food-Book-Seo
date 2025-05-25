@@ -1,3 +1,4 @@
+"use server";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 export async function getUserInfo() {
@@ -14,7 +15,6 @@ export async function getUserInfo() {
       return null;
     }
 
-    console.log(decoded);
     return decoded;
   } catch (error) {}
 }

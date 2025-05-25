@@ -1,18 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Menu, X, Search, BookOpen } from "lucide-react";
 import { useUser, UserButton, SignInButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { getUserInfo } from "@/action/my-action";
 
 export default function Navbar() {
   const router = useRouter();
-  const { isSignedIn, user, isLoaded } = useUser();
+  const [isSignedIn, setIssignedin] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoaded, setIsloaded] = useState(false);
   const [value, setValue] = useState("");
+  const [user, setUserInfo] = useState({});
   const [showSearch, setShowsearch] = useState(false);
 
+  const userInformation = async () => {
+    try {
+      const user = await getUserInfo();
+
+      if (!user) {
+        console.log("not found user info");
+      }
+
+      if (user) {
+        setUserInfo(user);
+        setIssignedin(!isSignedIn);
+        setIsloaded(!isLoaded);
+      }
+    } catch (error) {
+      console.log("failed to get the user information");
+    }
+  };
+  useEffect(() => {
+    userInformation();
+  }, []);
   const handleSearch = async () => {
     if (value.length > 2) {
       const url = `/recipes?query=${value}`;
@@ -105,7 +128,7 @@ export default function Navbar() {
             ) : isSignedIn ? (
               <div className="flex items-center gap-2">
                 <span className="hidden md:inline font-medium text-gray-700">
-                  {user.firstName || user.username}
+                  {user.name || user.email}
                 </span>
                 <UserButton afterSignOutUrl="/" />
               </div>
