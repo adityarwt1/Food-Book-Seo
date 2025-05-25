@@ -1,9 +1,31 @@
+"use client";
 import { getUserInfo } from "@/action/my-action";
 import MyRecipie from "@/components/MyRecipie";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-const page = async () => {
-  const { email } = await getUserInfo();
+const Page = () => {
+  const [email, setEmail] = useState("");
+  const router = useRouter();
+
+  const fetchUserInfo = async () => {
+    try {
+      const user = await getUserInfo();
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+      setEmail(user.email);
+    } catch (error) {
+      console.log("error in my recipes", error);
+      router.push("/login");
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
   return (
     <div>
       <MyRecipie email={email} />
@@ -11,4 +33,4 @@ const page = async () => {
   );
 };
 
-export default page;
+export default Page;
