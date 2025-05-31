@@ -11,7 +11,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "FoodBook - Your Personal Recipe Collection",
   description: "Discover, save and share your favorite recipes with FoodBook",
-  generator: "v0.dev",
+  generator: "Aditya Rawat",
+  keywords:
+    "recipes, cooking, food, foodbook, save recipes, share recipes, personal cookbook , http://foodbook-xi.vercel.app",
 };
 
 export default function RootLayout({
