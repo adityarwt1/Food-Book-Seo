@@ -44,7 +44,7 @@ export default function LoginPage() {
         error: "login failed",
         style: {
           backgroundColor: "#F59E0B",
-          color: "fff",
+          color: "white",
         },
       });
       const result = await response;
