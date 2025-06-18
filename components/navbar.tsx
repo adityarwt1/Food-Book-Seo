@@ -38,7 +38,7 @@ export default function Navbar() {
       }
 
       if (user) {
-        setUserInfo(user);
+        setUserInfo(user as User);
         setIssignedin(!isSignedIn);
         setIsloaded(true);
       }
