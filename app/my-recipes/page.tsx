@@ -1,3 +1,4 @@
+"use server";
 import { getUserInfo } from "@/action/my-action";
 import MyRecipie from "@/components/MyRecipie";
 import React from "react";
@@ -5,7 +6,7 @@ import React from "react";
 const Page = async () => {
   const user = await getUserInfo();
   const { email } = user as { email: string };
-  const url = process.env.BASE_URL;
+  const url = process.env.BASE_URL || "http://localhost:3000";
   const response = await fetch(`${url}/api/fetchrecipie?author=${email}`, {
     method: "GET",
   });
