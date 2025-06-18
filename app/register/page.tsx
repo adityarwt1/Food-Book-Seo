@@ -5,6 +5,7 @@ import type React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function RegisterPage() {
     }
 
     try {
-      const response = await fetch("/api/register", {
+      const register = fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,12 +51,20 @@ export default function RegisterPage() {
           password: formData.password,
         }),
       });
-
+      const response = await register;
       const data = await response.json();
 
       if (!response.ok) {
+        toast.error(data.error || "Failed to create the user");
         throw new Error(data.error || "Registration failed");
       }
+
+      toast.success("Account registered successfully!", {
+        style: {
+          backgroundColor: "#F59E0B",
+          color: "fff",
+        },
+      });
 
       setSuccess("Registration successful! Redirecting to login...");
 
