@@ -32,7 +32,10 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <Footer />
-        <Toaster position="bottom-right" />
+        <Toaster
+          position="bottom-right"
+          style={{ backgroundColor: "#F59E0B", color: "fff" }}
+        />
       </body>
     </html>
   );

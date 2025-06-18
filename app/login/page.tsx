@@ -5,6 +5,7 @@ import type React from "react";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,14 +31,23 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const result = await fetch("/api/login", {
+      const response = fetch("/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ ...formData }),
       });
-
+      toast.promise(response, {
+        loading: "login...",
+        success: "login successfully",
+        error: "login failed",
+        style: {
+          backgroundColor: "#F59E0B",
+          color: "fff",
+        },
+      });
+      const result = await response;
       const data = await result.json();
       if (!result.ok) {
         setError(data.message);
