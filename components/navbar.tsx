@@ -115,7 +115,7 @@ export default function Navbar() {
           </div>
 
           {/* Search and User Menu */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 ml-5">
             <button
               className="text-gray-500 hover:text-amber-500 transition-colors"
               onClick={() => setShowsearch((prev) => !prev)}
@@ -135,7 +135,7 @@ export default function Navbar() {
             >
               <input
                 type="text"
-                placeholder="Search something..."
+                placeholder="Search recipe..."
                 className="w-full h-full px-4 py-2 pr-10 shadow-md border  border-gray-300 rounded-md focus:outline-none "
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
