@@ -1,6 +1,6 @@
 import { getUserInfo } from "@/action/my-action";
 import MyRecipie from "@/components/MyRecipie";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const Page = async () => {
   const user = await getUserInfo();
