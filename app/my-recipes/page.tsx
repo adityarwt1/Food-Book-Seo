@@ -4,12 +4,6 @@ import MyRecipie from "@/components/MyRecipie";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  profileImage: string;
-}
 const Page = () => {
   const [email, setEmail] = useState("");
   const router = useRouter();
@@ -23,7 +17,9 @@ const Page = () => {
         return;
       }
 
-      setEmail((user as User).email);
+      const { email } = user as { email: string };
+      console.log("email", email);
+      setEmail(email);
     } catch (error) {
       console.log("error in my recipes", error);
       router.push("/login");
