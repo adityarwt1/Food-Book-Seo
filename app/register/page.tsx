@@ -66,7 +66,7 @@ export default function RegisterPage() {
         },
       });
 
-      setSuccess("Registration successful! Redirecting to login...");
+      setSuccess("successful! ");
 
       // Redirect to login page after successful registration
       setTimeout(() => {
