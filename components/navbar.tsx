@@ -68,7 +68,7 @@ export default function Navbar() {
     try {
       const logout = await logoutUser();
       if (logout) {
-        router.push("/login");
+        window.location.href = "/";
       }
     } catch (error) {
       console.log("error while logout", error);

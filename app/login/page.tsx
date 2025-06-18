@@ -53,7 +53,7 @@ export default function LoginPage() {
         setError(data.message);
       }
       if (result.ok) {
-        router.push("/recipes");
+        window.location.href = "/recipes";
       }
     } catch (err: any) {
       setError(err.message || "An error occurred during login");
