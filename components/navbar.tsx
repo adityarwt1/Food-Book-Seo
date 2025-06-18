@@ -120,7 +120,11 @@ export default function Navbar() {
               className="text-gray-500 hover:text-amber-500 transition-colors"
               onClick={() => setShowsearch((prev) => !prev)}
             >
-              <Search className="h-6 w-6" />
+              {!showSearch ? (
+                <Search className="h-6 w-6" />
+              ) : (
+                <X className="h-6 w-6" />
+              )}
             </button>
 
             {/* Animated Search Bar */}
