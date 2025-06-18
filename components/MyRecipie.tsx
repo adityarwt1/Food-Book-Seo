@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import MyRecipieSkeleton from "./MyRecipieSkeleton";
 
 interface Username {
-  email: string;
   recipes: [
     {
       _id: string;
@@ -21,7 +20,7 @@ interface Username {
     }
   ];
 }
-const MyRecipie: React.FC<Username> = ({ email, recipes }) => {
+const MyRecipie: React.FC<Username> = ({ recipes }) => {
   const handleDelete = async (id: string) => {
     const response = await fetch(`/api/recipes/delete?id=${id}`, {
       method: "DELETE",
@@ -30,43 +29,6 @@ const MyRecipie: React.FC<Username> = ({ email, recipes }) => {
       window.location.href = "/recipes";
     }
   };
-
-  if (!email) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
-            Error loading user data
-          </h1>
-          <p>
-            There was a problem loading your profile. Please try again later.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const skeletonCard = (
-    <div className="bg-white rounded-xl overflow-hidden shadow-sm animate-pulse w-full max-w-md mx-auto sm:max-w-full">
-      <div className="h-48 bg-gray-200 w-full"></div>
-      <div className="p-4 sm:p-6">
-        <div className="flex flex-wrap items-center gap-2 mb-2">
-          <div className="w-24 h-5 bg-gray-200 rounded-full"></div>
-          <div className="w-12 h-4 bg-gray-200 rounded-full"></div>
-        </div>
-        <div className="w-3/4 h-6 bg-gray-300 rounded mb-2"></div>
-        <div className="w-full h-4 bg-gray-200 rounded mb-2"></div>
-        <div className="w-5/6 h-4 bg-gray-200 rounded mb-4"></div>
-        <div className="flex justify-between flex-wrap gap-2">
-          <div className="w-20 h-4 bg-gray-200 rounded"></div>
-          <div className="flex gap-2">
-            <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-            <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

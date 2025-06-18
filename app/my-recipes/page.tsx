@@ -10,10 +10,10 @@ const Page = async () => {
     method: "GET",
   });
   const { recipes } = await response.json();
-  console.log("this is our recipies", recipes);
+  console.log("fetch recipe by author", recipes);
   return (
     <div>
-      <MyRecipie email={email}  />
+      <MyRecipie recipes={recipes} />
     </div>
   );
 };
