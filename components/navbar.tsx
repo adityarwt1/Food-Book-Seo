@@ -132,7 +132,7 @@ export default function Navbar() {
               <input
                 type="text"
                 placeholder="Search something..."
-                className="w-full h-full px-4 py-2 pr-10 shadow-md border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-full px-4 py-2 pr-10 shadow-md border  border-gray-300 rounded-md focus:outline-none "
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
               />
