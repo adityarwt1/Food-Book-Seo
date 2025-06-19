@@ -9,6 +9,7 @@ const Page = async () => {
   const url = process.env.BASE_URL || "http://localhost:3000";
   const response = await fetch(`${url}/api/fetchrecipie?author=${email}`, {
     method: "GET",
+    cache: "no-store",
   });
   const { recipes } = await response.json();
   console.log("fetch recipe by author", recipes);
