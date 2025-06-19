@@ -1,30 +1,45 @@
 "use server";
 import RecipeCard from "@/components/Recipe";
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 import React from "react";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}): Promise<Metadata> {
-  const { id } = await params;
-  const url = process.env.BASE_URL;
-  const response = await fetch(`${url}/api/fetchrecipie?id=${id}`);
-  const { recipes } = await response.json();
-  
+interface Recipe {
+  title: string;
+  description: string;
+  image: string;
 }
-const page = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = await params;
+
+
+export async function generateMetadata(
+  { params }: { params: { id: string } },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { id } = params;
   const url = process.env.BASE_URL;
   const response = await fetch(`${url}/api/fetchrecipie?id=${id}`);
   const { recipes } = await response.json();
+  const recipe = recipes?.[0];
+
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: recipe?.title || "Recipe",
+    openGraph: {
+      images: [recipe?.image || "/default.webp", ...previousImages],
+    },
+  };
+}
+
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const url = process.env.BASE_URL;
+  const response = await fetch(`${url}/api/fetchrecipie?id=${id}`);
+  const { recipes } = await response.json();
+  const recipe = recipes?.[0];
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <RecipeCard recipe={recipes.at(0)} key={recipes.at(0)._id} />
+      {recipe && <RecipeCard recipe={recipe} key={recipe._id} />}
     </div>
   );
-};
-
-export default page;
+}
