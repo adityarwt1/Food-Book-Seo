@@ -1,3 +1,6 @@
+"use client";
+import { Share } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import React from "react";
 import { FiClock, FiUsers, FiBarChart2, FiHeart } from "react-icons/fi";
@@ -17,15 +20,26 @@ interface Recipe {
     createdAt: string;
   };
 }
+const handleShare = () => {
+  const message = encodeURIComponent("Check out this awesome site!");
+  const url = encodeURIComponent(window.location.href);
+  const whatsappUrl = `https://api.whatsapp.com/send?text=${message}%20${url}`;
+  window.open(whatsappUrl, "_blank");
+};
 const RecipeCard: React.FC<Recipe> = ({ recipe }) => {
   return (
     <div className=" mx-10 rounded-xl overflow-hidden shadow-lg bg-white w-full">
       {/* Header with Image */}
       <div className="bg-amber-500 p-4 flex justify-between items-center">
         <h2 className="text-white text-2xl font-bold">{recipe.title}</h2>
-        <span className="bg-white text-amber-500 px-3 py-1 rounded-full text-sm font-semibold">
-          {recipe.category}
-        </span>
+        <div className="flex justify-center items-center ">
+          <span className="bg-white text-amber-500 px-3 py-1 rounded-full text-sm font-semibold">
+            {recipe.category}
+          </span>
+          <button onClick={handleShare} className="flex text-white mx-2">
+            <Share /> Share
+          </button>
+        </div>
       </div>
 
       {/* Recipe Image */}
@@ -98,7 +112,3 @@ const RecipeCard: React.FC<Recipe> = ({ recipe }) => {
   );
 };
 export default RecipeCard;
-// Example usage:
-// <div className="flex items-center justify-center min-h-screen bg-gray-50">
-//   <RecipeCard recipe={recipeObject} />
-// </div>
