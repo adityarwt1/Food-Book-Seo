@@ -3,13 +3,6 @@ import RecipeCard from "@/components/Recipe";
 import { Metadata, ResolvingMetadata } from "next";
 import React from "react";
 
-interface Recipe {
-  title: string;
-  description: string;
-  image: string;
-}
-
-
 export async function generateMetadata(
   { params }: { params: { id: string } },
   parent: ResolvingMetadata
