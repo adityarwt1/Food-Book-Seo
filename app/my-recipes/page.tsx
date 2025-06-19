@@ -18,7 +18,10 @@ const Page = async () => {
   if (!email) {
     redirect("/login");
   }
-  const url = process.env.BASE_URL || "http://localhost:3000";
+  const url =
+    process.env.NODE_ENV === "production"
+      ? "https://food-book-vert.vercel.app"
+      : "http://localhost:3000";
 
   try {
     const response = await fetch(`${url}/api/fetchrecipie?author=${email}`, {
