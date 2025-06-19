@@ -1,23 +1,46 @@
 "use server";
 import { getUserInfo } from "@/action/my-action";
 import MyRecipie from "@/components/MyRecipie";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import React from "react";
-
+import jwt from "jsonwebtoken";
 const Page = async () => {
-  const user = await getUserInfo();
-  const { email } = user as { email: string };
+  const coookieStore = await cookies();
+  const token = coookieStore.get("token")?.value || null;
+
+  if (!token) {
+    redirect("/login");
+  }
+
+  const decoded = await jwt.verify(token, process.env.JWT_SECRET as string);
+  const { email } = decoded as { email: string };
+  if (!email) {
+    redirect("/login");
+  }
   const url = process.env.BASE_URL || "http://localhost:3000";
-  const response = await fetch(`${url}/api/fetchrecipie?author=${email}`, {
-    method: "GET",
-    cache: "no-store",
-  });
-  const { recipes } = await response.json();
-  console.log("fetch recipe by author", recipes);
-  return (
-    <div>
-      <MyRecipie recipes={recipes} />
-    </div>
-  );
+
+  try {
+    const response = await fetch(`${url}/api/fetchrecipie?author=${email}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch recipes");
+    }
+
+    const { recipes } = await response.json();
+
+    return (
+      <div>
+        <MyRecipie recipes={recipes} />
+      </div>
+    );
+  } catch (error) {
+    console.error("Error fetching recipes:", error);
+    return <div>Error loading recipes</div>;
+  }
 };
 
 export default Page;
