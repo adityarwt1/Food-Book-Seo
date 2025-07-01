@@ -5,35 +5,26 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
 import jwt from "jsonwebtoken";
+import connectDB from "@/lib/db";
+import { Recipe } from "@/models";
+
 const Page = async () => {
-  const coookieStore = await cookies();
-  const token = coookieStore.get("token")?.value || null;
-
-  if (!token) {
-    redirect("/login");
-  }
-
-  const decoded = await jwt.verify(token, process.env.JWT_SECRET as string);
-  const { email } = decoded as { email: string };
-  if (!email) {
-    redirect("/login");
-  }
-  const url =
-    process.env.NODE_ENV === "production"
-      ? "https://food-book-vert.vercel.app"
-      : "http://localhost:3000";
-
   try {
-    const response = await fetch(`${url}/api/fetchrecipie?author=${email}`, {
-      method: "GET",
-      cache: "no-store",
-    });
+    const coookieStore = await cookies();
+    const token = coookieStore.get("token")?.value || null;
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch recipes");
+    if (!token) {
+      redirect("/login");
     }
 
-    const { recipes } = await response.json();
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET as string);
+    const { email } = decoded as { email: string };
+    if (!email) {
+      redirect("/login");
+    }
+
+    await connectDB();
+    const recipes = await Recipe.find({ email });
 
     return (
       <div>

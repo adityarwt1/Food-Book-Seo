@@ -5,22 +5,21 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import MyRecipieSkeleton from "./MyRecipieSkeleton";
 
-interface Username {
-  recipes: [
-    {
-      _id: string;
-      image: string;
-      category: {
-        name: string;
-      };
-      prepTime: number;
-      title: string;
-      description: string;
-      cookTime: number;
-    }
-  ];
+type RecipeType = {
+  _id: string;
+  image: string;
+  category: { name: string };
+  prepTime: number;
+  title: string;
+  description: string;
+  cookTime: number;
+};
+
+interface MyRecipieProps {
+  recipes: RecipeType[];
 }
-const MyRecipie: React.FC<Username> = ({ recipes }) => {
+
+const MyRecipie: React.FC<MyRecipieProps> = ({ recipes }) => {
   const handleDelete = async (id: string) => {
     const response = await fetch(`/api/recipes/delete?id=${id}`, {
       method: "DELETE",
