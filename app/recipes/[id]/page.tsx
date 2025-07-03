@@ -141,5 +141,9 @@ export default async function page({
     totalTime: recipe.totalTime,
   };
 
-  return <RecipeCard recipe={plainRecipe} key={plainRecipe._id} />;
+  return (
+    <div className="w-full h-fit flex items-center justify-center ">
+      <RecipeCard recipe={plainRecipe} key={plainRecipe._id} />
+    </div>
+  );
 }
