@@ -1,11 +1,13 @@
 "use client";
 import { Share } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { FiClock, FiUsers, FiBarChart2, FiHeart } from "react-icons/fi";
 
 interface Recipe {
   recipe: {
+    _id: string;
+    author: string;
     title: string;
     category: string;
     image: string;
@@ -21,6 +23,42 @@ interface Recipe {
 }
 
 const RecipeCard: React.FC<Recipe> = ({ recipe }) => {
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(parseInt(recipe.likes) || 0);
+  const hadnleLiike = async () => {
+    try {
+      if (!liked) {
+        try {
+          setLikes((prev) => prev + 1);
+          await fetch(
+            `/api/recipes/like?username=${recipe?.author}&recipieId=${recipe?._id}`,
+            { method: "POST" }
+          );
+          ``;
+        } catch (error) {
+          console.log((error as Error).message);
+        } finally {
+          setLiked(true);
+        }
+      }
+      if (liked) {
+        try {
+          setLikes((prev) => prev - 1);
+          await fetch(
+            `/api/recipes/like?username=${recipe?.author}&recipieId=${recipe?._id}`,
+            { method: "DELETE" }
+          );
+          ``;
+        } catch (error) {
+          console.log((error as Error).message);
+        } finally {
+          setLiked(false);
+        }
+      }
+    } catch (error) {
+      console.log("error while liking", error);
+    }
+  };
   const handleShare = () => {
     if (typeof window !== "undefined") {
       const message = encodeURIComponent("Check out this awesome recipe!");
@@ -121,9 +159,10 @@ const RecipeCard: React.FC<Recipe> = ({ recipe }) => {
           <button
             className="flex items-center text-amber-500 hover:text-amber-600 transition-colors"
             aria-label="Like recipe"
+            onClick={hadnleLiike}
           >
             <FiHeart className="mr-1" />
-            <span>{recipe.likes} Likes</span>
+            <span>{likes} Likes</span>
           </button>
         </div>
         <div className="text-xs sm:text-sm text-gray-500">
