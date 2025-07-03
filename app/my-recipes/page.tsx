@@ -1,5 +1,3 @@
-"use server";
-import { getUserInfo } from "@/action/my-action";
 import MyRecipie from "@/components/MyRecipie";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
