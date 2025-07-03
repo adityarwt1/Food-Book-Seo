@@ -2,7 +2,13 @@
 import { Share } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiClock, FiUsers, FiBarChart2, FiHeart } from "react-icons/fi";
+import {
+  FiClock,
+  FiUsers,
+  FiBarChart2,
+  FiHeart,
+  FiHeart as FiHeartFilled,
+} from "react-icons/fi";
 
 interface Recipe {
   recipe: {
@@ -157,7 +163,11 @@ const RecipeCard: React.FC<Recipe> = ({ recipe }) => {
             aria-label="Like recipe"
             onClick={hadnleLiike}
           >
-            <FiHeart className="mr-1" />
+            {liked ? (
+              <FiHeartFilled className="mr-1 fill-current" />
+            ) : (
+              <FiHeart className="mr-1" />
+            )}
             <span>{likes} Likes</span>
           </button>
         </div>
