@@ -25,37 +25,33 @@ interface Recipe {
 const RecipeCard: React.FC<Recipe> = ({ recipe }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(parseInt(recipe.likes) || 0);
+
   const hadnleLiike = async () => {
     try {
       if (!liked) {
-        try {
-          setLikes((prev) => prev + 1);
-          await fetch(
-            `/api/recipes/like?username=${recipe?.author}&recipieId=${recipe?._id}`,
-            { method: "POST" }
-          );
-          ``;
-        } catch (error) {
-          console.log((error as Error).message);
-        } finally {
-          setLiked(true);
-        }
-      }
-      if (liked) {
-        try {
-          setLikes((prev) => prev - 1);
-          await fetch(
-            `/api/recipes/like?username=${recipe?.author}&recipieId=${recipe?._id}`,
-            { method: "DELETE" }
-          );
-          ``;
-        } catch (error) {
-          console.log((error as Error).message);
-        } finally {
-          setLiked(false);
-        }
+        setLikes((prev) => prev + 1);
+        setLiked(true);
+        await fetch(
+          `/api/recipes/like?username=${recipe?.author}&recipieId=${recipe?._id}`,
+          { method: "POST" }
+        );
+      } else {
+        setLikes((prev) => Math.max(0, prev - 1));
+        setLiked(false);
+        await fetch(
+          `/api/recipes/like?username=${recipe?.author}&recipieId=${recipe?._id}`,
+          { method: "DELETE" }
+        );
       }
     } catch (error) {
+      // Revert state on error
+      if (liked) {
+        setLikes((prev) => prev + 1);
+        setLiked(false);
+      } else {
+        setLikes((prev) => Math.max(0, prev - 1));
+        setLiked(true);
+      }
       console.log("error while liking", error);
     }
   };

@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { Clock, Users, ChevronLeft, Bookmark, Share2, ThumbsUp } from "lucide-react";
+import {
+  Clock,
+  Users,
+  ChevronLeft,
+  Bookmark,
+  Share2,
+  ThumbsUp,
+} from "lucide-react";
 import connectDB from "@/lib/db";
 import { Recipe } from "@/models";
 import { redirect } from "next/navigation";
@@ -8,7 +15,7 @@ import EditRecipeForm from "@/components/EditRecipeForm";
 export default async function EditRecipePage({
   params,
 }: {
-  params: { id: string }
+  params: { id: string };
 }) {
   const { id } = await params;
 
@@ -16,13 +23,12 @@ export default async function EditRecipePage({
   const recipe = await Recipe.findOne({ _id: id });
 
   if (!recipe) {
-    return redirect('/recipes');
+    return redirect("/recipes");
   }
 
   return (
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto w-full">
-
         {/* Back Button */}
         <Link
           href="/recipes"
@@ -36,6 +42,5 @@ export default async function EditRecipePage({
         <EditRecipeForm recipe={JSON.parse(JSON.stringify(recipe))} />
       </div>
     </div>
-
   );
 }
